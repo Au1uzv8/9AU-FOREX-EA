@@ -1,0 +1,22 @@
+{
+  "generated": "2026-07-02",
+  "summary": {
+    "total_ea": 11,
+    "house_money_count": 5,
+    "compound_count": 6,
+    "avg_sharpe": 2.94
+  },
+  "ea": [
+    { "name": "9AU_GOLD_ADAPTIVE_REGIME_M5_CAP450", "symbol": "GOLD", "magic": 919291, "mode": "House Money", "status": "Active", "pf": 1.28, "sharpe": 1.99, "dd": 24.75, "rf": 2.39, "winrate": 67.06, "net_profit": 320.05, "pattern": ["Trend Following", "Grid"] },
+    { "name": "9AU_SILVER_TREND_RSI_GRID_M5_CAP300", "symbol": "SILVER", "magic": 919290, "mode": "House Money", "status": "Active", "pf": 2.03, "sharpe": 1.68, "dd": 35.84, "rf": 1.78, "winrate": 65.92, "net_profit": 2067.22, "pattern": ["Trend Following", "Grid"] },
+    { "name": "9AU_BTC_ADAPTIVE_REGIME_M5_CAP300", "symbol": "BITCOIN", "magic": 919295, "mode": "House Money", "status": "Active", "pf": 2.46, "sharpe": 0.81, "dd": 37.03, "rf": 1.79, "winrate": 40.48, "net_profit": 215.48, "pattern": ["Trend Following"] },
+    { "name": "9AU_Nasdaq100_TREND_M5_CAP300", "symbol": "NASDAQ100", "magic": 919294, "mode": "House Money", "status": "Forward Test", "pf": 1.74, "sharpe": 4.71, "dd": 23.94, "rf": 1.26, "winrate": 44.44, "net_profit": 36.05, "pattern": ["Trend Following", "Grid"] },
+    { "name": "9AU_Platinum_TREND_M5_CAP300", "symbol": "PLATINUM", "magic": 919292, "mode": "House Money", "status": "Active", "pf": 2.23, "sharpe": 3.13, "dd": 29.83, "rf": 2.05, "winrate": 53.12, "net_profit": 416.80, "pattern": ["Trend Following", "Grid"] },
+    { "name": "9AU_USDJPY_SNIPER_GRID_M5_CAP300", "symbol": "USDJPY", "magic": 515253, "mode": "Compound", "status": "Active", "pf": 1.79, "sharpe": 2.31, "dd": 15.00, "rf": 2.86, "winrate": 27.56, "net_profit": 56.05, "pattern": ["Trend Following", "Grid"] },
+    { "name": "9AU_GBPJPY_SNIPER_GRID_M5_CAP300", "symbol": "GBPJPY", "magic": 515254, "mode": "Compound", "status": "Active", "pf": 1.57, "sharpe": 2.40, "dd": 9.98, "rf": 3.62, "winrate": 20.34, "net_profit": 44.78, "pattern": ["Trend Following", "Grid"] },
+    { "name": "9AU_AUDCAD_MEAN_M15_CAP300", "symbol": "AUDCAD", "magic": 515251, "mode": "Compound", "status": "Active", "pf": 1.74, "sharpe": 1.71, "dd": 14.63, "rf": 2.02, "winrate": 71.75, "net_profit": 40.85, "pattern": ["Mean Reversion", "Grid"] },
+    { "name": "9AU_3PAIRS_MEAN_M15_CAP300", "symbol": "Oceanic Pairs", "magic": 515252, "mode": "Compound", "status": "Active", "pf": 15.12, "sharpe": 7.87, "dd": 6.18, "rf": 5.35, "winrate": 83.33, "net_profit": 33.98, "pattern": ["Mean Reversion", "Grid"] },
+    { "name": "9AU_OilCash_WTI_TREND_M5_CAP300", "symbol": "WTI", "magic": 919293, "mode": "Compound", "status": "Active", "pf": 4.48, "sharpe": 4.48, "dd": 8.22, "rf": 3.18, "winrate": 63.16, "net_profit": 26.56, "pattern": ["Trend Following", "Grid"] },
+    { "name": "9AU_ETH_ADAPTIVE_REGIME_M5_CAP300", "symbol": "ETHEREUM", "magic": 919296, "mode": "Compound", "status": "Active", "pf": 1.69, "sharpe": 1.28, "dd": 8.50, "rf": 1.13, "winrate": 9.80, "net_profit": 11.74, "pattern": ["Trend Following"] }
+  ]
+}
