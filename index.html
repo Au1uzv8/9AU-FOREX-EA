@@ -78,6 +78,43 @@
     flex-wrap:wrap;
     align-items:center;
   }
+  .filter-group{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  .pattern-filters{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    align-items:center;
+    width:100%;
+    margin-top:8px;
+    padding-left:0;
+  }
+  .pattern-chip{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    color:var(--muted);
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:6px 10px;
+  }
+  .pattern-chip input{accent-color:var(--teal);}
+  .summary{max-width:1200px;margin:0 auto 16px;padding:0 24px;}
+  .summary-box{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:10px 12px;
+    color:var(--muted);
+    font-family:var(--mono);
+    font-size:12px;
+  }
   .seg{
     display:flex;
     border:1px solid var(--border);
@@ -170,6 +207,8 @@
   }
   .badge.hm{background:var(--amber-dim);color:var(--amber);}
   .badge.cp{background:var(--teal-dim);color:var(--teal);}
+  .badge.cap{background:rgba(63,167,150,0.15);color:var(--teal);border:1px solid rgba(63,167,150,0.25);}
+  .badge.pattern{background:rgba(212,169,74,0.12);color:var(--amber);border:1px solid rgba(212,169,74,0.25);}
   .badge.status{
     background:transparent;
     border:1px solid var(--border);
@@ -243,38 +282,54 @@
     <button data-mode="House Money">House Money</button>
     <button data-mode="Compound">Compound</button>
   </div>
-  <select id="sortBy">
-    <option value="sharpe">Sort: Sharpe (สูง→ต่ำ)</option>
-    <option value="pf">Sort: Profit Factor (สูง→ต่ำ)</option>
-    <option value="dd">Sort: Equity DD (ต่ำ→สูง)</option>
-    <option value="net_profit">Sort: Net Profit (สูง→ต่ำ)</option>
-  </select>
+  <div class="filter-group">
+    <select id="sortBy">
+      <option value="sharpe">Sort: Sharpe (สูง→ต่ำ)</option>
+      <option value="pf">Sort: Profit Factor (สูง→ต่ำ)</option>
+      <option value="dd">Sort: Equity DD (ต่ำ→สูง)</option>
+      <option value="net_profit">Sort: Net Profit (สูง→ต่ำ)</option>
+    </select>
+    <select id="portFilter">
+      <option value="all">Port: All</option>
+      <option value="Port-01">Port-01</option>
+      <option value="Port-02">Port-02</option>
+      <option value="Port-03">Port-03</option>
+    </select>
+    <select id="regimeFilter">
+      <option value="all">Regime: All</option>
+      <option value="Adaptive Regime">Adaptive Regime</option>
+      <option value="Static">Static</option>
+    </select>
+  </div>
   <input type="search" id="search" placeholder="ค้นหา Symbol หรือชื่อ EA...">
+</div>
+<div class="pattern-filters" id="patternFilters">
+  <label class="pattern-chip"><input type="checkbox" value="Grid"> Grid</label>
+  <label class="pattern-chip"><input type="checkbox" value="Hedging"> Hedging</label>
+  <label class="pattern-chip"><input type="checkbox" value="Mean Reversion"> Mean Reversion</label>
+  <label class="pattern-chip"><input type="checkbox" value="Martingale"> Martingale</label>
+  <label class="pattern-chip"><input type="checkbox" value="Trend Following"> Trend Following</label>
 </div>
 
 <main>
+  <div class="summary" id="summary"></div>
   <div class="grid" id="grid"></div>
-</main>
-
-<footer>
-  Data synced from Obsidian Vault — EA_Trade / 02_EA_PROJECTS · Classification: Max DD &lt; 18% = Compound, &ge; 18% = House Money
-</footer>
 
 <script id="ea-data" type="application/json">
 {
-  "generated": "2026-07-02",
+  "generated": "2026-07-05",
   "ea": [
-    { "name": "9AU_GOLD_ADAPTIVE_REGIME_M5_CAP450", "symbol": "GOLD", "magic": 919291, "mode": "House Money", "status": "Active", "pf": 1.28, "sharpe": 1.99, "dd": 24.75, "rf": 2.39, "winrate": 67.06, "net_profit": 320.05 },
-    { "name": "9AU_SILVER_TREND_RSI_GRID_M5_CAP300", "symbol": "SILVER", "magic": 919290, "mode": "House Money", "status": "Active", "pf": 2.03, "sharpe": 1.68, "dd": 35.84, "rf": 1.78, "winrate": 65.92, "net_profit": 2067.22 },
-    { "name": "9AU_BTC_ADAPTIVE_REGIME_M5_CAP300", "symbol": "BITCOIN", "magic": 919295, "mode": "House Money", "status": "Active", "pf": 2.46, "sharpe": 0.81, "dd": 37.03, "rf": 1.79, "winrate": 40.48, "net_profit": 215.48 },
-    { "name": "9AU_Nasdaq100_TREND_M5_CAP300", "symbol": "NASDAQ100", "magic": 919294, "mode": "House Money", "status": "Forward Test", "pf": 1.74, "sharpe": 4.71, "dd": 23.94, "rf": 1.26, "winrate": 44.44, "net_profit": 36.05 },
-    { "name": "9AU_Platinum_TREND_M5_CAP300", "symbol": "PLATINUM", "magic": 919292, "mode": "House Money", "status": "Active", "pf": 2.23, "sharpe": 3.13, "dd": 29.83, "rf": 2.05, "winrate": 53.12, "net_profit": 416.80 },
-    { "name": "9AU_USDJPY_SNIPER_GRID_M5_CAP300", "symbol": "USDJPY", "magic": 515253, "mode": "Compound", "status": "Active", "pf": 1.79, "sharpe": 2.31, "dd": 15.00, "rf": 2.86, "winrate": 27.56, "net_profit": 56.05 },
-    { "name": "9AU_GBPJPY_SNIPER_GRID_M5_CAP300", "symbol": "GBPJPY", "magic": 515254, "mode": "Compound", "status": "Active", "pf": 1.57, "sharpe": 2.40, "dd": 9.98, "rf": 3.62, "winrate": 20.34, "net_profit": 44.78 },
-    { "name": "9AU_AUDCAD_MEAN_M15_CAP300", "symbol": "AUDCAD", "magic": 515251, "mode": "Compound", "status": "Active", "pf": 1.74, "sharpe": 1.71, "dd": 14.63, "rf": 2.02, "winrate": 71.75, "net_profit": 40.85 },
-    { "name": "9AU_3PAIRS_MEAN_M15_CAP300", "symbol": "Oceanic Pairs", "magic": 515252, "mode": "Compound", "status": "Active", "pf": 15.12, "sharpe": 7.87, "dd": 6.18, "rf": 5.35, "winrate": 83.33, "net_profit": 33.98 },
-    { "name": "9AU_OilCash_WTI_TREND_M5_CAP300", "symbol": "WTI", "magic": 919293, "mode": "Compound", "status": "Active", "pf": 4.48, "sharpe": 4.48, "dd": 8.22, "rf": 3.18, "winrate": 63.16, "net_profit": 26.56 },
-    { "name": "9AU_ETH_ADAPTIVE_REGIME_M5_CAP300", "symbol": "ETHEREUM", "magic": 919296, "mode": "Compound", "status": "Active", "pf": 1.69, "sharpe": 1.28, "dd": 8.50, "rf": 1.13, "winrate": 9.80, "net_profit": 11.74 }
+    { "name": "9AU_GOLD_COMBINE_M5_CAP450", "symbol": "GOLD", "magic": 919291, "mode": "House Money", "status": "Active", "pf": 1.28, "sharpe": 1.99, "dd": 24.75, "rf": 2.39, "winrate": 67.06, "net_profit": 320.05, "filename": "9AU_GOLD_COMBINE_M5_CAP450.mq5", "source": "9AU_GOLD_COMBINE_M5_CAP450.mq5", "version": "v19.4", "own_capital": 450, "port_group": "Port-01", "combine_capital": 750, "port_members": ["USDJPY"], "patterns": ["Grid", "Hedging"], "is_adaptive_regime": true },
+    { "name": "9AU_SILVER_COMBINE_M5_CAP300", "symbol": "SILVER", "magic": 919290, "mode": "House Money", "status": "Active", "pf": 2.03, "sharpe": 1.68, "dd": 35.84, "rf": 1.78, "winrate": 65.92, "net_profit": 2067.22, "filename": "9AU_SILVER_COMBINE_M5_CAP300.mq5", "source": "9AU_SILVER_COMBINE_M5_CAP300.mq5", "version": "v1.2", "own_capital": 300, "port_group": "Port-03", "combine_capital": 600, "port_members": ["GBPJPY"], "patterns": ["Grid", "Martingale"], "is_adaptive_regime": false },
+    { "name": "9AU_BTC_COMBINE_M5_CAP300", "symbol": "BITCOIN", "magic": 919295, "mode": "House Money", "status": "Active", "pf": 2.46, "sharpe": 0.81, "dd": 37.03, "rf": 1.79, "winrate": 40.48, "net_profit": 215.48, "filename": "9AU_BTC_COMBINE_M5_CAP300.mq5", "source": "9AU_BTC_COMBINE_M5_CAP300.mq5", "version": "v2.3", "own_capital": 300, "port_group": "Port-02", "combine_capital": 600, "port_members": ["AUDCAD"], "patterns": ["Grid", "Hedging"], "is_adaptive_regime": true },
+    { "name": "9AU_Nasdaq100_TREND_M5_CAP300", "symbol": "NASDAQ100", "magic": 919294, "mode": "House Money", "status": "Forward Test", "pf": 1.74, "sharpe": 4.71, "dd": 23.94, "rf": 1.26, "winrate": 44.44, "net_profit": 36.05, "pattern": ["Trend Following", "Grid"] },
+    { "name": "9AU_Platinum_TREND_M5_CAP300", "symbol": "PLATINUM", "magic": 919292, "mode": "House Money", "status": "Active", "pf": 2.23, "sharpe": 3.13, "dd": 29.83, "rf": 2.05, "winrate": 53.12, "net_profit": 416.80, "pattern": ["Trend Following", "Grid"] },
+    { "name": "9AU_USDJPY_COMBINE_M5_CAP300", "symbol": "USDJPY", "magic": 515253, "mode": "Compound", "status": "Active", "pf": 1.79, "sharpe": 2.31, "dd": 15.00, "rf": 2.86, "winrate": 27.56, "net_profit": 56.05, "filename": "9AU_USDJPY_COMBINE_M5_CAP300.mq5", "source": "9AU_USDJPY_COMBINE_M5_CAP300.mq5", "version": "v1.1", "own_capital": 300, "port_group": "Port-01", "combine_capital": 750, "port_members": ["Gold"], "patterns": ["Grid"], "is_adaptive_regime": false },
+    { "name": "9AU_GBPJPY_COMBINE_M5_CAP300", "symbol": "GBPJPY", "magic": 515254, "mode": "Compound", "status": "Active", "pf": 1.57, "sharpe": 2.40, "dd": 9.98, "rf": 3.62, "winrate": 20.34, "net_profit": 44.78, "filename": "9AU_GBPJPY_COMBINE_M5_CAP300.mq5", "source": "9AU_GBPJPY_COMBINE_M5_CAP300.mq5", "version": "v1.1", "own_capital": 300, "port_group": "Port-03", "combine_capital": 600, "port_members": ["Silver"], "patterns": ["Grid", "Martingale"], "is_adaptive_regime": false },
+    { "name": "9AU_AUDCAD_COMBINE_M15_CAP300", "symbol": "AUDCAD", "magic": 515251, "mode": "Compound", "status": "Active", "pf": 1.74, "sharpe": 1.71, "dd": 14.63, "rf": 2.02, "winrate": 71.75, "net_profit": 40.85, "filename": "9AU_AUDCAD_COMBINE_M15_CAP300.mq5", "source": "9AU_AUDCAD_COMBINE_M15_CAP300.mq5", "version": "v6.4", "own_capital": 300, "port_group": "Port-02", "combine_capital": 600, "port_members": ["BTC"], "patterns": ["Mean Reversion"], "is_adaptive_regime": false },
+    { "name": "9AU_3PAIRS_MEAN_M15_CAP300", "symbol": "Oceanic Pairs", "magic": 515252, "mode": "Compound", "status": "Active", "pf": 15.12, "sharpe": 7.87, "dd": 6.18, "rf": 5.35, "winrate": 83.33, "net_profit": 33.98, "pattern": ["Mean Reversion", "Grid"] },
+    { "name": "9AU_OilCash_WTI_TREND_M5_CAP300", "symbol": "WTI", "magic": 919293, "mode": "Compound", "status": "Active", "pf": 4.48, "sharpe": 4.48, "dd": 8.22, "rf": 3.18, "winrate": 63.16, "net_profit": 26.56, "pattern": ["Trend Following", "Grid"] },
+    { "name": "9AU_ETH_ADAPTIVE_REGIME_M5_CAP300", "symbol": "ETHEREUM", "magic": 919296, "mode": "Compound", "status": "Active", "pf": 1.69, "sharpe": 1.28, "dd": 8.50, "rf": 1.13, "winrate": 9.80, "net_profit": 11.74, "pattern": ["Trend Following"] }
   ]
 }
 </script>
@@ -298,12 +353,37 @@ function renderTicker(){
   document.getElementById('updated').textContent = 'Updated ' + DATA.generated;
 }
 
+function renderSummary(list){
+  const summary = document.getElementById('summary');
+  const portFilter = document.getElementById('portFilter').value;
+  const regimeFilter = document.getElementById('regimeFilter').value;
+
+  if(portFilter !== 'all' && list.length){
+    const first = list.find(e => e.port_group === portFilter) || list[0];
+    const members = [...new Set(list.flatMap(e => e.port_members || []))].join(', ');
+    summary.innerHTML = `<div class="summary-box">${portFilter} | Combine Capital ${first.combine_capital} | Members: ${members || '—'}</div>`;
+  } else if(regimeFilter !== 'all' && list.length){
+    const members = [...new Set(list.map(e => e.symbol))].join(', ');
+    summary.innerHTML = `<div class="summary-box">Members: ${members}</div>`;
+  } else {
+    summary.innerHTML = '';
+  }
+}
+
 function renderCards(list){
   const grid = document.getElementById('grid');
+  if(!list.length){
+    grid.innerHTML = '<div class="card"><div class="ea-name">No EA matches the current filters.</div></div>';
+    return;
+  }
   grid.innerHTML = list.map(e => {
     const mc = modeClass(e.mode);
     const ddPct = Math.min(e.dd, 40) / 40 * 100;
     const statusBadge = e.status !== 'Active' ? `<span class="badge status">${e.status}</span>` : '';
+    const patterns = (e.patterns || e.pattern || []).join(' · ');
+    const regimeLabel = e.is_adaptive_regime ? 'Adaptive' : 'Static';
+    const capitalBadge = e.port_group ? `<span class="badge cap">[CAP ${e.own_capital}] → [COMBINE ${e.combine_capital}]</span>` : '';
+    const patternBadge = patterns ? `<span class="badge pattern">${patterns} · ${regimeLabel}</span>` : '';
     return `
       <div class="card ${mc}">
         <div class="card-top">
@@ -312,6 +392,10 @@ function renderCards(list){
             <div class="ea-name">${e.name}</div>
           </div>
           <div><span class="badge ${mc}">${e.mode}</span>${statusBadge}</div>
+        </div>
+        <div class="badge-row">
+          ${capitalBadge}
+          ${patternBadge}
         </div>
         <div class="metrics">
           <div class="metric"><div class="metric-label">PF</div><div class="metric-value">${e.pf.toFixed(2)}</div></div>
@@ -338,8 +422,23 @@ function applyFiltersAndRender(){
   const mode = document.querySelector('#modeFilter button.active').dataset.mode;
   const query = document.getElementById('search').value.trim().toLowerCase();
   const sortBy = document.getElementById('sortBy').value;
+  const port = document.getElementById('portFilter').value;
+  const regime = document.getElementById('regimeFilter').value;
+  const selectedPatterns = Array.from(document.querySelectorAll('#patternFilters input:checked')).map(cb => cb.value);
 
   let list = eaList.filter(e => mode === 'all' || e.mode === mode);
+  if(port !== 'all'){
+    list = list.filter(e => e.port_group === port);
+  }
+  if(regime !== 'all'){
+    list = list.filter(e => (e.is_adaptive_regime ? 'Adaptive Regime' : 'Static') === regime);
+  }
+  if(selectedPatterns.length){
+    list = list.filter(e => {
+      const patterns = e.patterns || e.pattern || [];
+      return selectedPatterns.some(p => patterns.includes(p));
+    });
+  }
   if(query){
     list = list.filter(e => e.symbol.toLowerCase().includes(query) || e.name.toLowerCase().includes(query));
   }
@@ -347,6 +446,7 @@ function applyFiltersAndRender(){
     if(sortBy === 'dd') return a.dd - b.dd;
     return b[sortBy] - a[sortBy];
   });
+  renderSummary(list);
   renderCards(list);
 }
 
@@ -358,7 +458,10 @@ document.querySelectorAll('#modeFilter button').forEach(btn => {
   });
 });
 document.getElementById('sortBy').addEventListener('change', applyFiltersAndRender);
+document.getElementById('portFilter').addEventListener('change', applyFiltersAndRender);
+document.getElementById('regimeFilter').addEventListener('change', applyFiltersAndRender);
 document.getElementById('search').addEventListener('input', applyFiltersAndRender);
+document.querySelectorAll('#patternFilters input').forEach(cb => cb.addEventListener('change', applyFiltersAndRender));
 
 renderTicker();
 applyFiltersAndRender();
