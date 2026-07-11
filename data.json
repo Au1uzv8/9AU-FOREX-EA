@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-08",
+  "generated": "2026-07-11",
   "summary": {
     "total_ea": 11,
     "house_money_count": 5,
@@ -8,7 +8,7 @@
   },
   "ea": [
     { "name": "9AU_GOLD_COMBINE_M5_CAP450", "symbol": "GOLD", "magic": 919291, "mode": "House Money", "status": "Active", "pf": 1.28, "sharpe": 1.99, "dd": 24.75, "rf": 2.39, "winrate": 67.06, "net_profit": 320.05, "filename": "9AU_GOLD_COMBINE_M5_CAP450.mq5", "source": "9AU_GOLD_COMBINE_M5_CAP450.mq5", "version": "v19.4", "own_capital": 450, "port_group": "Port-01", "combine_capital": 750, "port_members": ["USDJPY"], "patterns": ["Grid", "Hedging"], "is_adaptive_regime": true },
-    { "name": "9AU_SILVER_COMBINE_M5_CAP300", "symbol": "SILVER", "magic": 919290, "mode": "House Money", "status": "Active", "pf": 2.03, "sharpe": 1.68, "dd": 35.84, "rf": 1.78, "winrate": 65.92, "net_profit": 2067.22, "filename": "9AU_SILVER_COMBINE_M5_CAP300.mq5", "source": "9AU_SILVER_COMBINE_M5_CAP300.mq5", "version": "v1.2", "own_capital": 300, "port_group": "Port-03", "combine_capital": 600, "port_members": ["GBPJPY"], "patterns": ["Grid", "Martingale"], "is_adaptive_regime": false },
+    { "name": "9AU_SILVER_RESERVE_M5_CAP450", "symbol": "SILVER", "magic": 919290, "mode": "House Money", "status": "Active", "version": "V2.3", "base_capital": 450, "reserve_capital": 225, "own_capital": 675, "port_group": "Port-03", "combine_capital": 975, "port_members": ["GBPJPY"], "patterns": ["Grid", "Martingale", "Reserve-Capital"], "is_adaptive_regime": false, "portfolio_mode": "House Money", "diagnostic_pattern": "A1", "net_profit_pct": 559.82, "cagr_pct": 112.72, "profit_factor": 1.57, "recovery_factor": 0.97, "sharpe_ratio": 1.35, "win_rate_pct": 62.67, "balance_dd_max_pct": 19.21, "equity_dd_max_pct": 46.69, "near_death_dd_pct": 40, "max_dd_hard_kill_pct": 70, "cycle_win_rate_pct": 75.0, "last_validated": "2026-07-11", "pf": 1.57, "sharpe": 1.35, "dd": 19.21, "rf": 0.97, "winrate": 62.67, "net_profit": 559.82, "filename": "9AU_SILVER_RESERVE_M5_CAP450.mq5", "source": "9AU_SILVER_RESERVE_M5_CAP450.mq5" },
     { "name": "9AU_BTC_COMBINE_M5_CAP300", "symbol": "BITCOIN", "magic": 919295, "mode": "House Money", "status": "Active", "pf": 2.32, "sharpe": 0.81, "dd": 39.75, "rf": 1.78, "winrate": 39.78, "net_profit": 213.67, "filename": "9AU_BTC_COMBINE_M5_CAP300.mq5", "source": "9AU_BTC_COMBINE_M5_CAP300.mq5", "version": "v3.5", "own_capital": 300, "port_group": "Port-02", "combine_capital": 600, "port_members": ["AUDCAD"], "patterns": ["Grid", "Hedging"], "is_adaptive_regime": true },
     { "name": "9AU_Nasdaq100_TREND_M5_CAP300", "symbol": "NASDAQ100", "magic": 919294, "mode": "House Money", "status": "Forward Test", "pf": 1.74, "sharpe": 4.71, "dd": 23.94, "rf": 1.26, "winrate": 44.44, "net_profit": 36.05, "pattern": ["Trend Following", "Grid"] },
     { "name": "9AU_Platinum_TREND_M5_CAP300", "symbol": "PLATINUM", "magic": 919292, "mode": "House Money", "status": "Active", "pf": 2.23, "sharpe": 3.13, "dd": 29.83, "rf": 2.05, "winrate": 53.12, "net_profit": 416.80, "pattern": ["Trend Following", "Grid"] },
