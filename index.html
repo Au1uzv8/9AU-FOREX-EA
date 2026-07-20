@@ -6,6 +6,8 @@
 <title>9AU FOREX EA — Portfolio Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- เรียกใช้งาน Chart.js สำหรับวาดกราฟ Radar -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   :root{
     --bg:#0B0E14;
@@ -85,13 +87,13 @@
     align-items:center;
   }
   .pattern-filters{
+    max-width:1200px;
+    margin:8px auto 0;
+    padding:0 24px;
     display:flex;
     gap:8px;
     flex-wrap:wrap;
     align-items:center;
-    width:100%;
-    margin-top:8px;
-    padding-left:0;
   }
   .pattern-chip{
     display:flex;
@@ -103,9 +105,10 @@
     border:1px solid var(--border);
     border-radius:999px;
     padding:6px 10px;
+    cursor:pointer;
   }
-  .pattern-chip input{accent-color:var(--teal);}
-  .summary{max-width:1200px;margin:0 auto 16px;padding:0 24px;}
+  .pattern-chip input{accent-color:var(--teal); cursor:pointer;}
+  .summary{max-width:1200px;margin:16px auto 0;padding:0 24px;}
   .summary-box{
     background:var(--panel);
     border:1px solid var(--border);
@@ -144,6 +147,7 @@
     border-radius:8px;
     font-family:var(--sans);
     font-size:13px;
+    outline:none;
   }
   input[type="search"]{min-width:180px;}
   input[type="search"]::placeholder{color:var(--muted);}
@@ -152,6 +156,15 @@
     max-width:1200px;
     margin:24px auto 60px;
     padding:0 24px;
+  }
+  .section-title{
+    font-family:var(--mono);
+    font-size:16px;
+    font-weight:600;
+    margin:32px 0 16px;
+    padding-bottom:8px;
+    border-bottom:1px solid var(--border);
+    color:var(--text);
   }
   .grid{
     display:grid;
@@ -172,9 +185,10 @@
     border-left:4px solid var(--muted);
     border-radius:10px;
     padding:16px 18px;
-    transition:background 0.15s ease, transform 0.15s ease;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
   }
-  .card:hover{background:var(--panel-hover);transform:translateY(-1px);}
   .card.hm{border-left-color:var(--amber);}
   .card.cp{border-left-color:var(--teal);}
 
@@ -204,6 +218,8 @@
     white-space:nowrap;
     text-transform:uppercase;
     letter-spacing:0.3px;
+    display:inline-block;
+    margin-top:4px;
   }
   .badge.hm{background:var(--amber-dim);color:var(--amber);}
   .badge.cp{background:var(--teal-dim);color:var(--teal);}
@@ -217,34 +233,13 @@
     margin-left:6px;
   }
 
-  .metrics{
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap:8px 4px;
-    margin:12px 0;
+  /* ปรับแต่งพื้นที่แสดงผลกราฟ Radar ในการ์ดรายตัว */
+  .chart-container {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    margin: 12px 0;
   }
-  .metric{font-family:var(--mono);}
-  .metric-label{font-size:10px;color:var(--muted);text-transform:uppercase;}
-  .metric-value{font-size:14px;font-weight:600;}
-
-  .dd-bar-wrap{margin-top:10px;}
-  .dd-bar-label{
-    display:flex;
-    justify-content:space-between;
-    font-family:var(--mono);
-    font-size:10px;
-    color:var(--muted);
-    margin-bottom:4px;
-  }
-  .dd-bar{
-    height:5px;
-    background:#1B212D;
-    border-radius:4px;
-    overflow:hidden;
-  }
-  .dd-bar-fill{height:100%;border-radius:4px;}
-  .dd-bar-fill.hm{background:var(--amber);}
-  .dd-bar-fill.cp{background:var(--teal);}
 
   .net-profit{
     margin-top:14px;
@@ -257,6 +252,45 @@
   .net-profit-label{font-size:11px;color:var(--muted);}
   .net-profit-value{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--text);}
 
+  /* สไตล์สำหรับส่วนกราฟเปรียบเทียบรวมและอันดับท้ายเว็บบอร์ด */
+  .comparison-section {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 32px;
+  }
+  .comparison-layout {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+  .global-chart-wrap {
+    flex: 1;
+    max-height: 400px;
+    position: relative;
+  }
+  .rank-list-wrap {
+    width: 350px;
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+  .rank-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .rank-item:last-child { border-bottom: none; }
+  .rank-index { color: var(--muted); width: 24px; }
+  .rank-name { flex: 1; font-weight: 500; }
+  .rank-val { font-weight: 600; }
+
+  @media (max-width: 850px) {
+    .comparison-layout { flex-direction: column; }
+    .rank-list-wrap { width: 100%; }
+  }
+
   footer{
     text-align:center;
     padding:20px;
@@ -264,6 +298,7 @@
     font-size:11px;
     color:var(--muted);
     border-top:1px solid var(--border);
+    margin-top:60px;
   }
 </style>
 </head>
@@ -304,6 +339,7 @@
   </div>
   <input type="search" id="search" placeholder="ค้นหา Symbol หรือชื่อ EA...">
 </div>
+
 <div class="pattern-filters" id="patternFilters">
   <label class="pattern-chip"><input type="checkbox" value="Grid"> Grid</label>
   <label class="pattern-chip"><input type="checkbox" value="Hedging"> Hedging</label>
@@ -315,7 +351,27 @@
 
 <main>
   <div class="summary" id="summary"></div>
+  
+  <div class="section-title">ราย EA (Individual Spider Views)</div>
   <div class="grid" id="grid"></div>
+
+  <div class="section-title">สรุปรวมและอันดับทั้งหมด (Portfolio Summary & Chart Comparison)</div>
+  <div class="comparison-section">
+    <div class="comparison-layout">
+      <div class="global-chart-wrap">
+        <canvas id="globalRadarChart"></canvas>
+      </div>
+      <div class="rank-list-wrap">
+        <div style="font-weight:600; padding-bottom:12px; border-bottom:1px solid var(--border); color:var(--muted)">RANKING BY SORT SELECTION</div>
+        <div id="rankList"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  9AU FOREX EA — Optimized Performance Spider Charts
+</footer>
 
 <script id="ea-data" type="application/json">
 {
@@ -340,7 +396,29 @@
 const DATA = JSON.parse(document.getElementById('ea-data').textContent);
 const eaList = DATA.ea;
 
+// หาค่า Max/Min สถิติทั้งหมดสำหรับสเกลข้อมูลเชิงเปรียบเทียบใน Spider Chart (0.0 - 1.0)
+const bounds = {
+  sharpe: { min: Math.min(...eaList.map(e => e.sharpe)), max: Math.max(...eaList.map(e => e.sharpe)) },
+  pf: { min: Math.min(...eaList.map(e => e.pf)), max: Math.max(...eaList.map(e => e.pf)) },
+  rf: { min: Math.min(...eaList.map(e => e.rf)), max: Math.max(...eaList.map(e => e.rf)) },
+  winrate: { min: Math.min(...eaList.map(e => e.winrate)), max: Math.max(...eaList.map(e => e.winrate)) },
+  dd: { min: Math.min(...eaList.map(e => e.dd)), max: Math.max(...eaList.map(e => e.dd)) }
+};
+
+function normalize(val, type) {
+  const { min, max } = bounds[type];
+  if (max === min) return 0.5;
+  let normalized = (val - min) / (max - min);
+  // สำหรับ DD ยิ่งต่ำยิ่งดี ให้สลับแกนเพื่อดึงเส้นกราฟให้กว้างเมื่อเสี่ยงต่ำ
+  if (type === 'dd') normalized = 1 - normalized;
+  return normalized;
+}
+
+let activeCharts = [];
+let globalRadarChart = null;
+
 function modeClass(mode){ return mode === 'House Money' ? 'hm' : 'cp'; }
+function modeColor(mode){ return mode === 'House Money' ? '#D4A94A' : '#3FA796'; }
 
 function renderTicker(){
   const hm = eaList.filter(e => e.mode === 'House Money').length;
@@ -372,15 +450,19 @@ function renderSummary(list){
   }
 }
 
-function renderCards(list){
+function renderCardsAndCharts(list){
   const grid = document.getElementById('grid');
+  activeCharts.forEach(c => c.destroy());
+  activeCharts = [];
+
   if(!list.length){
     grid.innerHTML = '<div class="card"><div class="ea-name">No EA matches the current filters.</div></div>';
     return;
   }
-  grid.innerHTML = list.map(e => {
+
+  // สร้างโครงสร้าง HTML สำหรับการ์ด
+  grid.innerHTML = list.map((e, idx) => {
     const mc = modeClass(e.mode);
-    const ddPct = Math.min(e.dd, 40) / 40 * 100;
     const statusBadge = e.status !== 'Active' ? `<span class="badge status">${e.status}</span>` : '';
     const patterns = (e.patterns || e.pattern || []).join(' · ');
     const regimeLabel = e.is_adaptive_regime ? 'Adaptive' : 'Static';
@@ -390,32 +472,29 @@ function renderCards(list){
     const capitalBadge = e.port_group ? `<span class="badge cap">[CAP ${e.own_capital} (${capDetail})] → [COMBINE ${e.combine_capital}]</span>` : '';
     const patternBadge = patterns ? `<span class="badge pattern">${patterns} · ${regimeLabel}</span>` : '';
     const reserveBadge = (e.patterns || []).includes('Reserve-Capital') ? `<span class="badge reserve">Reserve System</span>` : '';
+    
     return `
       <div class="card ${mc}">
-        <div class="card-top">
-          <div>
-            <div class="symbol">${e.symbol}</div>
-            <div class="ea-name">${e.name}</div>
+        <div>
+          <div class="card-top">
+            <div>
+              <div class="symbol">${e.symbol}</div>
+              <div class="ea-name">${e.name}</div>
+            </div>
+            <div><span class="badge ${mc}">${e.mode}</span>${statusBadge}</div>
           </div>
-          <div><span class="badge ${mc}">${e.mode}</span>${statusBadge}</div>
+          <div class="badge-row">
+            ${capitalBadge}
+            ${patternBadge}
+            ${reserveBadge}
+          </div>
         </div>
-        <div class="badge-row">
-          ${capitalBadge}
-          ${patternBadge}
-          ${reserveBadge}
+        
+        <!-- ส่วนพื้นที่แสดงผลกราฟ Spider -->
+        <div class="chart-container">
+          <canvas id="chart-${idx}"></canvas>
         </div>
-        <div class="metrics">
-          <div class="metric"><div class="metric-label">PF</div><div class="metric-value">${e.pf.toFixed(2)}</div></div>
-          <div class="metric"><div class="metric-label">Sharpe</div><div class="metric-value">${e.sharpe.toFixed(2)}</div></div>
-          <div class="metric"><div class="metric-label">RF</div><div class="metric-value">${e.rf.toFixed(2)}</div></div>
-          <div class="metric"><div class="metric-label">Win Rate</div><div class="metric-value">${e.winrate.toFixed(1)}%</div></div>
-          <div class="metric"><div class="metric-label">Magic</div><div class="metric-value">${e.magic}</div></div>
-          <div class="metric"><div class="metric-label">DD</div><div class="metric-value">${e.dd.toFixed(2)}%</div></div>
-        </div>
-        <div class="dd-bar-wrap">
-          <div class="dd-bar-label"><span>Equity DD</span><span>18% threshold</span></div>
-          <div class="dd-bar"><div class="dd-bar-fill ${mc}" style="width:${ddPct}%"></div></div>
-        </div>
+
         <div class="net-profit">
           <span class="net-profit-label">Net Profit</span>
           <span class="net-profit-value">${e.net_profit.toFixed(2)}%</span>
@@ -423,6 +502,123 @@ function renderCards(list){
       </div>
     `;
   }).join('');
+
+  // เริ่มวาดกราฟลงในการ์ดแต่ละใบด้วย Chart.js
+  list.forEach((e, idx) => {
+    const ctx = document.getElementById(`chart-${idx}`).getContext('2d');
+    const color = modeColor(e.mode);
+    
+    const chart = new Chart(ctx, {
+      type: 'radar',
+      data: {
+        labels: ['Sharpe', 'PF', 'RF', 'Win Rate', 'Low DD'],
+        datasets: [{
+          data: [
+            normalize(e.sharpe, 'sharpe'),
+            normalize(e.pf, 'pf'),
+            normalize(e.rf, 'rf'),
+            normalize(e.winrate, 'winrate'),
+            normalize(e.dd, 'dd')
+          ],
+          backgroundColor: color + '22',
+          borderColor: color,
+          borderWidth: 2,
+          pointBackgroundColor: color,
+          pointRadius: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          r: {
+            grid: { color: '#232938' },
+            angleLines: { color: '#232938' },
+            pointLabels: { color: '#7A8699', font: { family: 'IBM Plex Mono', size: 10 } },
+            ticks: { display: false },
+            min: 0,
+            max: 1
+          }
+        }
+      }
+    });
+    activeCharts.push(chart);
+  });
+}
+
+function renderGlobalComparisonAndRanking(list, sortBy){
+  // 1. เรนเดอร์ส่วนตารางอันดับ Rank List ขวามือ
+  const rankList = document.getElementById('rankList');
+  rankList.innerHTML = list.map((e, idx) => {
+    let displayVal = '';
+    if (sortBy === 'sharpe') displayVal = e.sharpe.toFixed(2);
+    if (sortBy === 'pf') displayVal = e.pf.toFixed(2);
+    if (sortBy === 'dd') displayVal = e.dd.toFixed(2) + '%';
+    if (sortBy === 'net_profit') displayVal = e.net_profit.toFixed(2) + '%';
+
+    return `
+      <div class="rank-item">
+        <span class="rank-index">${idx + 1}</span>
+        <span class="rank-name" style="color:${modeColor(e.mode)}">${e.symbol}</span>
+        <span class="rank-val">${displayVal}</span>
+      </div>
+    `;
+  }).join('');
+
+  // 2. เรนเดอร์กราฟเปรียบเทียบรวม (จำกัดแสดงท็อป 5 ตัวแรกเพื่อไม่ให้เส้นกราฟซ้อนกันจนมองไม่รู้เรื่อง)
+  if (globalRadarChart) globalRadarChart.destroy();
+  const ctx = document.getElementById('globalRadarChart').getContext('2d');
+  
+  const displayLimit = Math.min(list.length, 5);
+  const datasets = list.slice(0, displayLimit).map((e, idx) => {
+    const baseColor = modeColor(e.mode);
+    // ปรับความทึบแสงของเส้นตามลำดับ Rank (อันดับแรกสุดจะเด่นชัดที่สุด)
+    const alpha = (1 - (idx * 0.15)).toFixed(2); 
+    return {
+      label: e.symbol,
+      data: [
+        normalize(e.sharpe, 'sharpe'),
+        normalize(e.pf, 'pf'),
+        normalize(e.rf, 'rf'),
+        normalize(e.winrate, 'winrate'),
+        normalize(e.dd, 'dd')
+      ],
+      backgroundColor: 'transparent',
+      borderColor: baseColor,
+      borderWidth: idx === 0 ? 3 : 1.5,
+      pointBackgroundColor: baseColor,
+      pointRadius: idx === 0 ? 3 : 1
+    };
+  });
+
+  globalRadarChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['Sharpe', 'PF', 'RF', 'Win Rate', 'Low DD'],
+      datasets: datasets
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: { color: '#E8EAED', font: { family: 'IBM Plex Mono', size: 11 } }
+        }
+      },
+      scales: {
+        r: {
+          grid: { color: '#232938' },
+          angleLines: { color: '#232938' },
+          pointLabels: { color: '#E8EAED', font: { family: 'Inter', size: 12, weight: '600' } },
+          ticks: { display: false },
+          min: 0,
+          max: 1
+        }
+      }
+    }
+  });
 }
 
 function applyFiltersAndRender(){
@@ -453,8 +649,10 @@ function applyFiltersAndRender(){
     if(sortBy === 'dd') return a.dd - b.dd;
     return b[sortBy] - a[sortBy];
   });
+  
   renderSummary(list);
-  renderCards(list);
+  renderCardsAndCharts(list);
+  renderGlobalComparisonAndRanking(list, sortBy);
 }
 
 document.querySelectorAll('#modeFilter button').forEach(btn => {
