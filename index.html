@@ -6,7 +6,6 @@
 <title>9AU FOREX EA — Portfolio Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<!-- เรียกใช้งาน Chart.js สำหรับวาดกราฟ Radar -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   :root{
@@ -20,6 +19,8 @@
     --amber-dim:rgba(212,169,74,0.12);
     --teal:#3FA796;
     --teal-dim:rgba(63,167,150,0.12);
+    --purple:#8A5CF5;
+    --purple-dim:rgba(138,92,245,0.15);
     --mono:'IBM Plex Mono', monospace;
     --sans:'Inter', sans-serif;
   }
@@ -61,7 +62,7 @@
     max-width:1200px;
     margin:16px auto 0;
     display:flex;
-    gap:24px;
+    gap:20px;
     flex-wrap:wrap;
     font-family:var(--mono);
     font-size:13px;
@@ -70,6 +71,7 @@
   .ticker-item b{color:var(--text);font-weight:600;}
   .ticker-item.hm b{color:var(--amber);}
   .ticker-item.cp b{color:var(--teal);}
+  .ticker-item.period b{color:var(--purple);}
 
   .controls{
     max-width:1200px;
@@ -109,15 +111,6 @@
   }
   .pattern-chip input{accent-color:var(--teal); cursor:pointer;}
   .summary{max-width:1200px;margin:16px auto 0;padding:0 24px;}
-  .summary-box{
-    background:var(--panel);
-    border:1px solid var(--border);
-    border-radius:8px;
-    padding:10px 12px;
-    color:var(--muted);
-    font-family:var(--mono);
-    font-size:12px;
-  }
   .seg{
     display:flex;
     border:1px solid var(--border);
@@ -138,6 +131,39 @@
   .seg button:last-child{border-right:none;}
   .seg button.active{background:var(--text);color:var(--bg);}
   .seg button:hover:not(.active){color:var(--text);}
+
+  .metric-tabs {
+    max-width:1200px;
+    margin:24px auto 0;
+    padding:0 24px;
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:10px;
+  }
+  .metric-tab-btn {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    padding: 14px 10px;
+    cursor: pointer;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+  .metric-tab-btn:hover { background: var(--panel-hover); color: var(--text); }
+  .metric-tab-btn.active {
+    background: var(--teal-dim);
+    border-color: var(--teal);
+    color: var(--teal);
+    box-shadow: 0 0 12px rgba(63,167,150,0.15);
+  }
+  @media (max-width: 800px) {
+    .metric-tabs { grid-template-columns: repeat(2, 1fr); }
+    .metric-tabs button:last-child { grid-column: span 2; }
+  }
 
   input[type="search"], select{
     background:var(--panel);
@@ -171,13 +197,8 @@
     grid-template-columns:repeat(3, 1fr);
     gap:16px;
   }
-  @media (max-width:900px){
-    .grid{grid-template-columns:repeat(2, 1fr);}
-  }
-  @media (max-width:640px){
-    .grid{grid-template-columns:1fr;}
-    .title-row{flex-direction:column;}
-  }
+  @media (max-width:900px){ .grid{grid-template-columns:repeat(2, 1fr);} }
+  @media (max-width:640px){ .grid{grid-template-columns:1fr;} .title-row{flex-direction:column;} }
 
   .card{
     background:var(--panel);
@@ -188,71 +209,72 @@
     display:flex;
     flex-direction:column;
     justify-content:space-between;
+    position: relative;
   }
   .card.hm{border-left-color:var(--amber);}
   .card.cp{border-left-color:var(--teal);}
 
-  .card-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    margin-bottom:10px;
+  .rank-badge-card {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    background: #1B212D;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .symbol{
-    font-family:var(--mono);
-    font-size:18px;
-    font-weight:600;
-  }
-  .ea-name{
-    font-size:11px;
-    color:var(--muted);
-    margin-top:2px;
-    word-break:break-all;
-  }
+
+  .card-top{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
+  .symbol{ font-family:var(--mono); font-size:18px; font-weight:600; }
+  .ea-name{ font-size:11px; color:var(--muted); margin-top:2px; word-break:break-all; }
+  
+  .badge-container { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
   .badge{
-    font-family:var(--sans);
-    font-size:10px;
-    font-weight:600;
-    padding:3px 8px;
-    border-radius:100px;
-    white-space:nowrap;
-    text-transform:uppercase;
-    letter-spacing:0.3px;
-    display:inline-block;
-    margin-top:4px;
+    font-family:var(--sans); font-size:10px; font-weight:600; padding:3px 8px; border-radius:100px; white-space:nowrap; text-transform:uppercase; letter-spacing:0.3px; display:inline-block;
   }
   .badge.hm{background:var(--amber-dim);color:var(--amber);}
   .badge.cp{background:var(--teal-dim);color:var(--teal);}
+  .badge.period{background:var(--purple-dim);color:var(--purple);border:1px solid rgba(138,92,245,0.3);}
   .badge.cap{background:rgba(63,167,150,0.15);color:var(--teal);border:1px solid rgba(63,167,150,0.25);}
   .badge.pattern{background:rgba(212,169,74,0.12);color:var(--amber);border:1px solid rgba(212,169,74,0.25);}
-  .badge.reserve{background:rgba(115,85,255,0.10);color:var(--teal);border:1px solid rgba(115,85,255,0.18);} 
-  .badge.status{
-    background:transparent;
-    border:1px solid var(--border);
-    color:var(--muted);
-    margin-left:6px;
-  }
+  .badge.status{ background:transparent; border:1px solid var(--border); color:var(--muted); }
 
-  /* ปรับแต่งพื้นที่แสดงผลกราฟ Radar ในการ์ดรายตัว */
-  .chart-container {
-    position: relative;
-    width: 100%;
-    height: 180px;
-    margin: 12px 0;
+  .chart-container { position: relative; width: 100%; height: 180px; margin: 12px 0; }
+
+  .focused-stat {
+    background: rgba(255,255,255,0.03);
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 12px;
   }
+  .focused-stat span { color: var(--muted); font-size: 11px; }
+  .focused-stat b { color: var(--text); font-weight: 600; }
 
   .net-profit{
-    margin-top:14px;
-    padding-top:12px;
+    margin-top:10px;
+    padding-top:10px;
     border-top:1px solid var(--border);
     display:flex;
     justify-content:space-between;
     align-items:baseline;
   }
   .net-profit-label{font-size:11px;color:var(--muted);}
-  .net-profit-value{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--text);}
+  .net-profit-value{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--text);}
 
-  /* สไตล์สำหรับส่วนกราฟเปรียบเทียบรวมและอันดับท้ายเว็บบอร์ด */
   .comparison-section {
     background: var(--panel);
     border: 1px solid var(--border);
@@ -260,27 +282,10 @@
     padding: 24px;
     margin-top: 32px;
   }
-  .comparison-layout {
-    display: flex;
-    gap: 24px;
-    align-items: center;
-  }
-  .global-chart-wrap {
-    flex: 1;
-    max-height: 400px;
-    position: relative;
-  }
-  .rank-list-wrap {
-    width: 350px;
-    font-family: var(--mono);
-    font-size: 13px;
-  }
-  .rank-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 12px;
-    border-bottom: 1px solid var(--border);
-  }
+  .comparison-layout { display: flex; gap: 24px; align-items: center; }
+  .global-chart-wrap { flex: 1; max-height: 400px; position: relative; }
+  .rank-list-wrap { width: 350px; font-family: var(--mono); font-size: 13px; }
+  .rank-item { display: flex; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid var(--border); }
   .rank-item:last-child { border-bottom: none; }
   .rank-index { color: var(--muted); width: 24px; }
   .rank-name { flex: 1; font-weight: 500; }
@@ -318,12 +323,12 @@
     <button data-mode="House Money">House Money</button>
     <button data-mode="Compound">Compound</button>
   </div>
+
   <div class="filter-group">
-    <select id="sortBy">
-      <option value="sharpe">Sort: Sharpe (สูง→ต่ำ)</option>
-      <option value="pf">Sort: Profit Factor (สูง→ต่ำ)</option>
-      <option value="dd">Sort: Equity DD (ต่ำ→สูง)</option>
-      <option value="net_profit">Sort: Net Profit (สูง→ต่ำ)</option>
+    <select id="periodFilter">
+      <option value="all">Period: All</option>
+      <option value="30">30 Months</option>
+      <option value="9">9 Months</option>
     </select>
     <select id="portFilter">
       <option value="all">Port: All</option>
@@ -337,7 +342,8 @@
       <option value="Static">Static</option>
     </select>
   </div>
-  <input type="search" id="search" placeholder="ค้นหา Symbol หรือชื่อ EA...">
+  
+  <input type="search" id="search" placeholder="ค้นหา Symbol...">
 </div>
 
 <div class="pattern-filters" id="patternFilters">
@@ -349,20 +355,28 @@
   <label class="pattern-chip"><input type="checkbox" value="Trend Following"> Trend Following</label>
 </div>
 
+<div class="metric-tabs" id="metricTabs">
+  <button data-metric="dd" class="metric-tab-btn active">1. Equity DD Maximal (%)</button>
+  <button data-metric="rf" class="metric-tab-btn">2. Recovery Factor</button>
+  <button data-metric="pf" class="metric-tab-btn">3. Profit Factor</button>
+  <button data-metric="payoff" class="metric-tab-btn">4. Expected Payoff</button>
+  <button data-metric="sharpe" class="metric-tab-btn">5. Sharpe Ratio</button>
+</div>
+
 <main>
   <div class="summary" id="summary"></div>
   
-  <div class="section-title">ราย EA (Individual Spider Views)</div>
+  <div class="section-title" id="gridTitle">ราย EA</div>
   <div class="grid" id="grid"></div>
 
-  <div class="section-title">สรุปรวมและอันดับทั้งหมด (Portfolio Summary & Chart Comparison)</div>
+  <div class="section-title">สรุปรวมและอันดับทั้งหมด</div>
   <div class="comparison-section">
     <div class="comparison-layout">
       <div class="global-chart-wrap">
         <canvas id="globalRadarChart"></canvas>
       </div>
       <div class="rank-list-wrap">
-        <div style="font-weight:600; padding-bottom:12px; border-bottom:1px solid var(--border); color:var(--muted)">RANKING BY SORT SELECTION</div>
+        <div style="font-weight:600; padding-bottom:12px; border-bottom:1px solid var(--border); color:var(--muted)" id="rankListTitle">RANKING</div>
         <div id="rankList"></div>
       </div>
     </div>
@@ -370,24 +384,24 @@
 </main>
 
 <footer>
-  9AU FOREX EA — Optimized Performance Spider Charts
+  9AU FOREX EA — Portfolio Dashboard
 </footer>
 
 <script id="ea-data" type="application/json">
 {
-  "generated": "2026-07-11",
+  "generated": "2026-07-26",
   "ea": [
-    { "name": "9AU_GOLD_COMBINE_M5_CAP450", "symbol": "GOLD", "magic": 919291, "mode": "House Money", "status": "Active", "pf": 1.28, "sharpe": 1.99, "dd": 24.75, "rf": 2.39, "winrate": 67.06, "net_profit": 320.05, "filename": "9AU_GOLD_COMBINE_M5_CAP450.mq5", "source": "9AU_GOLD_COMBINE_M5_CAP450.mq5", "version": "v19.4", "own_capital": 450, "port_group": "Port-01", "combine_capital": 750, "port_members": ["USDJPY"], "patterns": ["Grid", "Hedging"], "is_adaptive_regime": true },
-    { "name": "9AU_SILVER_RESERVE_M5_CAP450", "symbol": "SILVER", "magic": 919290, "mode": "House Money", "status": "Active", "version": "V2.3", "base_capital": 450, "reserve_capital": 225, "own_capital": 675, "port_group": "Port-03", "combine_capital": 975, "port_members": ["GBPJPY"], "patterns": ["Grid", "Martingale", "Reserve-Capital"], "is_adaptive_regime": false, "portfolio_mode": "House Money", "diagnostic_pattern": "A1", "net_profit_pct": 559.82, "cagr_pct": 112.72, "profit_factor": 1.57, "recovery_factor": 0.97, "sharpe_ratio": 1.35, "win_rate_pct": 62.67, "balance_dd_max_pct": 19.21, "equity_dd_max_pct": 46.69, "near_death_dd_pct": 40, "max_dd_hard_kill_pct": 70, "cycle_win_rate_pct": 75.0, "last_validated": "2026-07-11", "pf": 1.57, "sharpe": 1.35, "dd": 19.21, "rf": 0.97, "winrate": 62.67, "net_profit": 559.82, "filename": "9AU_SILVER_RESERVE_M5_CAP450.mq5", "source": "9AU_SILVER_RESERVE_M5_CAP450.mq5" },
-    { "name": "9AU_BTC_COMBINE_M5_CAP300", "symbol": "BITCOIN", "magic": 919295, "mode": "House Money", "status": "Active", "pf": 2.32, "sharpe": 0.81, "dd": 39.75, "rf": 1.78, "winrate": 39.78, "net_profit": 213.67, "filename": "9AU_BTC_COMBINE_M5_CAP300.mq5", "source": "9AU_BTC_COMBINE_M5_CAP300.mq5", "version": "v3.5", "own_capital": 300, "port_group": "Port-02", "combine_capital": 600, "port_members": ["AUDCAD"], "patterns": ["Grid", "Hedging"], "is_adaptive_regime": true },
-    { "name": "9AU_Nasdaq100_TREND_M5_CAP300", "symbol": "NASDAQ100", "magic": 919294, "mode": "House Money", "status": "Forward Test", "pf": 1.74, "sharpe": 4.71, "dd": 23.94, "rf": 1.26, "winrate": 44.44, "net_profit": 36.05, "pattern": ["Trend Following", "Grid"] },
-    { "name": "9AU_Platinum_TREND_M5_CAP300", "symbol": "PLATINUM", "magic": 919292, "mode": "House Money", "status": "Active", "pf": 2.23, "sharpe": 3.13, "dd": 29.83, "rf": 2.05, "winrate": 53.12, "net_profit": 416.80, "pattern": ["Trend Following", "Grid"] },
-    { "name": "9AU_USDJPY_COMBINE_M5_CAP300", "symbol": "USDJPY", "magic": 515253, "mode": "Compound", "status": "Active", "pf": 1.79, "sharpe": 2.31, "dd": 15.00, "rf": 2.86, "winrate": 27.56, "net_profit": 56.05, "filename": "9AU_USDJPY_COMBINE_M5_CAP300.mq5", "source": "9AU_USDJPY_COMBINE_M5_CAP300.mq5", "version": "v1.1", "own_capital": 300, "port_group": "Port-01", "combine_capital": 750, "port_members": ["Gold"], "patterns": ["Grid"], "is_adaptive_regime": false },
-    { "name": "9AU_GBPJPY_COMBINE_M5_CAP300", "symbol": "GBPJPY", "magic": 515254, "mode": "Compound", "status": "Active", "pf": 1.57, "sharpe": 2.40, "dd": 9.98, "rf": 3.62, "winrate": 20.34, "net_profit": 44.78, "filename": "9AU_GBPJPY_COMBINE_M5_CAP300.mq5", "source": "9AU_GBPJPY_COMBINE_M5_CAP300.mq5", "version": "v1.1", "own_capital": 300, "port_group": "Port-03", "combine_capital": 600, "port_members": ["Silver"], "patterns": ["Grid", "Martingale"], "is_adaptive_regime": false },
-    { "name": "9AU_AUDCAD_COMBINE_M15_CAP300", "symbol": "AUDCAD", "magic": 515251, "mode": "Compound", "status": "Active", "pf": 1.74, "sharpe": 1.71, "dd": 14.63, "rf": 2.02, "winrate": 71.75, "net_profit": 40.85, "filename": "9AU_AUDCAD_COMBINE_M15_CAP300.mq5", "source": "9AU_AUDCAD_COMBINE_M15_CAP300.mq5", "version": "v6.4", "own_capital": 300, "port_group": "Port-02", "combine_capital": 600, "port_members": ["BTC"], "patterns": ["Mean Reversion"], "is_adaptive_regime": false },
-    { "name": "9AU_3PAIRS_MEAN_M15_CAP300", "symbol": "Oceanic Pairs", "magic": 515252, "mode": "Compound", "status": "Active", "pf": 15.12, "sharpe": 7.87, "dd": 6.18, "rf": 5.35, "winrate": 83.33, "net_profit": 33.98, "pattern": ["Mean Reversion", "Grid"] },
-    { "name": "9AU_OilCash_WTI_TREND_M5_CAP300", "symbol": "WTI", "magic": 919293, "mode": "Compound", "status": "Active", "pf": 4.48, "sharpe": 4.48, "dd": 8.22, "rf": 3.18, "winrate": 63.16, "net_profit": 26.56, "pattern": ["Trend Following", "Grid"] },
-    { "name": "9AU_ETH_ADAPTIVE_REGIME_M5_CAP300", "symbol": "ETHEREUM", "magic": 919296, "mode": "Compound", "status": "Active", "pf": 1.69, "sharpe": 1.28, "dd": 8.50, "rf": 1.13, "winrate": 9.80, "net_profit": 11.74, "pattern": ["Trend Following"] }
+    { "name": "9AU_3PAIRS_MEAN_M15_CAP300", "symbol": "3PAIRS-M15", "magic": 515252, "period_months": 30, "period_label": "30M", "mode": "Compound", "status": "Active", "pf": 15.12, "sharpe": 7.87, "dd": 6.18, "rf": 5.35, "winrate": 83.33, "payoff": 2.45, "net_profit": 33.98, "filename": "9AU_3PAIRS_MEAN_M15_CAP300.mq5", "port_group": "Port-03", "combine_capital": 600, "port_members": ["AUDCAD"], "patterns": ["Mean Reversion", "Grid"], "is_adaptive_regime": false, "own_capital": 300 },
+    { "name": "9AU_OilCash_WTI_TREND_M5_CAP300", "symbol": "OIL-WTI-M5", "magic": 919293, "period_months": 9, "period_label": "9M", "mode": "Compound", "status": "Active", "pf": 12.00, "sharpe": 3.56, "dd": 7.58, "rf": 1.25, "winrate": 92.31, "payoff": 3.10, "net_profit": 10.45, "filename": "9AU_OilCash_WTI_TREND_M5_CAP300.mq5", "port_group": "Port-02", "combine_capital": 600, "port_members": ["USDJPY"], "patterns": ["Trend Following", "Grid"], "is_adaptive_regime": false, "own_capital": 300 },
+    { "name": "9AU_ETH_ADAPTIVE_REGIME_M5_CAP300", "symbol": "ETHEREUM-M5", "magic": 919296, "period_months": 30, "period_label": "30M", "mode": "Compound", "status": "Active", "pf": 1.69, "sharpe": 1.28, "dd": 8.50, "rf": 1.13, "winrate": 9.80, "payoff": 1.15, "net_profit": 11.74, "patterns": ["Trend Following"], "is_adaptive_regime": true, "own_capital": 300 },
+    { "name": "9AU_GBPJPY_COMBINE_M5_CAP300", "symbol": "GBPJPY-M5", "magic": 515254, "period_months": 30, "period_label": "30M", "mode": "Compound", "status": "Active", "pf": 1.57, "sharpe": 2.40, "dd": 9.98, "rf": 3.62, "winrate": 20.34, "payoff": 4.20, "net_profit": 44.78, "filename": "9AU_GBPJPY_COMBINE_M5_CAP300.mq5", "port_group": "Port-01", "combine_capital": 600, "port_members": ["NDAQ100"], "patterns": ["Grid", "Martingale"], "is_adaptive_regime": false, "own_capital": 300 },
+    { "name": "9AU_AUDCAD_COMBINE_M15_CAP300", "symbol": "AUDCAD-M15", "magic": 515251, "period_months": 30, "period_label": "30M", "mode": "Compound", "status": "Active", "pf": 1.84, "sharpe": 1.96, "dd": 12.29, "rf": 2.74, "winrate": 65.52, "payoff": 2.80, "net_profit": 38.37, "filename": "9AU_AUDCAD_COMBINE_M15_CAP300.mq5", "port_group": "Port-03", "combine_capital": 600, "port_members": ["3PAIRS"], "patterns": ["Mean Reversion"], "is_adaptive_regime": false, "own_capital": 300 },
+    { "name": "9AU_USDJPY_COMBINE_M5_CAP300", "symbol": "USDJPY-M5", "magic": 515253, "period_months": 30, "period_label": "30M", "mode": "Compound", "status": "Active", "pf": 1.79, "sharpe": 2.32, "dd": 14.69, "rf": 3.00, "winrate": 27.27, "payoff": 3.65, "net_profit": 58.81, "filename": "9AU_USDJPY_COMBINE_M5_CAP300.mq5", "port_group": "Port-02", "combine_capital": 600, "port_members": ["OIL-WTI"], "patterns": ["Grid"], "is_adaptive_regime": false, "own_capital": 300 },
+    { "name": "9AU_GOLD_COMBINE_M5_CAP450", "symbol": "GOLD-M5", "magic": 919291, "period_months": 30, "period_label": "30M", "mode": "House Money", "status": "Active", "pf": 1.31, "sharpe": 2.09, "dd": 21.36, "rf": 2.93, "winrate": 67.43, "payoff": 5.10, "net_profit": 337.91, "filename": "9AU_GOLD_COMBINE_M5_CAP450.mq5", "patterns": ["Grid", "Hedging"], "is_adaptive_regime": true, "own_capital": 450 },
+    { "name": "9AU_Nasdaq100_TREND_M5_CAP300", "symbol": "NDAQ100-M5", "magic": 919294, "period_months": 9, "period_label": "9M", "mode": "Compound", "status": "Active", "pf": 1.60, "sharpe": 3.39, "dd": 24.87, "rf": 1.11, "winrate": 42.86, "payoff": 2.15, "net_profit": 31.61, "filename": "9AU_Nasdaq100_TREND_M5_CAP300.mq5", "port_group": "Port-01", "combine_capital": 600, "port_members": ["GBPJPY"], "patterns": ["Trend Following", "Grid"], "is_adaptive_regime": false, "own_capital": 300 },
+    { "name": "9AU_Platinum_TREND_M5_CAP300", "symbol": "PLATINUM-M5", "magic": 919292, "period_months": 9, "period_label": "9M", "mode": "House Money", "status": "Active", "pf": 2.23, "sharpe": 3.13, "dd": 29.83, "rf": 2.05, "winrate": 53.12, "payoff": 4.80, "patterns": ["Trend Following", "Grid"], "is_adaptive_regime": false, "own_capital": 300 },
+    { "name": "9AU_SILVER_RESERVE_M5_CAP450", "symbol": "SILVER1-M5", "magic": 919290, "period_months": 30, "period_label": "30M", "mode": "House Money", "status": "Active", "pf": 2.03, "sharpe": 1.68, "dd": 35.84, "rf": 1.78, "winrate": 65.92, "payoff": 6.30, "net_profit": 2067.22, "filename": "9AU_SILVER_RESERVE_M5_CAP450.mq5", "patterns": ["Grid", "Martingale", "Reserve-Capital"], "is_adaptive_regime": false, "base_capital": 450, "reserve_capital": 225, "own_capital": 675 },
+    { "name": "9AU_BTC_COMBINE_M5_CAP300", "symbol": "BITCOIN-M5", "magic": 919295, "period_months": 30, "period_label": "30M", "mode": "House Money", "status": "Active", "pf": 2.46, "sharpe": 0.81, "dd": 37.03, "rf": 1.79, "winrate": 40.48, "payoff": 3.90, "net_profit": 215.48, "filename": "9AU_BTC_COMBINE_M5_CAP300.mq5", "patterns": ["Grid", "Hedging"], "is_adaptive_regime": true, "own_capital": 300 }
   ]
 }
 </script>
@@ -396,20 +410,18 @@
 const DATA = JSON.parse(document.getElementById('ea-data').textContent);
 const eaList = DATA.ea;
 
-// หาค่า Max/Min สถิติทั้งหมดสำหรับสเกลข้อมูลเชิงเปรียบเทียบใน Spider Chart (0.0 - 1.0)
 const bounds = {
-  sharpe: { min: Math.min(...eaList.map(e => e.sharpe)), max: Math.max(...eaList.map(e => e.sharpe)) },
-  pf: { min: Math.min(...eaList.map(e => e.pf)), max: Math.max(...eaList.map(e => e.pf)) },
-  rf: { min: Math.min(...eaList.map(e => e.rf)), max: Math.max(...eaList.map(e => e.rf)) },
-  winrate: { min: Math.min(...eaList.map(e => e.winrate)), max: Math.max(...eaList.map(e => e.winrate)) },
-  dd: { min: Math.min(...eaList.map(e => e.dd)), max: Math.max(...eaList.map(e => e.dd)) }
+  sharpe: { min: Math.min(...eaList.map(e => e.sharpe || 0)), max: Math.max(...eaList.map(e => e.sharpe || 0)) },
+  pf: { min: Math.min(...eaList.map(e => e.pf || 0)), max: Math.max(...eaList.map(e => e.pf || 0)) },
+  rf: { min: Math.min(...eaList.map(e => e.rf || 0)), max: Math.max(...eaList.map(e => e.rf || 0)) },
+  winrate: { min: Math.min(...eaList.map(e => e.winrate || 0)), max: Math.max(...eaList.map(e => e.winrate || 0)) },
+  dd: { min: Math.min(...eaList.map(e => e.dd || 0)), max: Math.max(...eaList.map(e => e.dd || 0)) }
 };
 
 function normalize(val, type) {
   const { min, max } = bounds[type];
   if (max === min) return 0.5;
-  let normalized = (val - min) / (max - min);
-  // สำหรับ DD ยิ่งต่ำยิ่งดี ให้สลับแกนเพื่อดึงเส้นกราฟให้กว้างเมื่อเสี่ยงต่ำ
+  let normalized = ((val || 0) - min) / (max - min);
   if (type === 'dd') normalized = 1 - normalized;
   return normalized;
 }
@@ -420,90 +432,101 @@ let globalRadarChart = null;
 function modeClass(mode){ return mode === 'House Money' ? 'hm' : 'cp'; }
 function modeColor(mode){ return mode === 'House Money' ? '#D4A94A' : '#3FA796'; }
 
+const tabNames = {
+  dd: 'Equity DD Maximal (%)',
+  rf: 'Recovery Factor',
+  pf: 'Profit Factor',
+  payoff: 'Expected Payoff',
+  sharpe: 'Sharpe Ratio'
+};
+
+function getMetricValueString(e, metric) {
+  const val = e[metric] || 0;
+  if (metric === 'dd') return val.toFixed(2) + '%';
+  if (metric === 'rf') return val.toFixed(2);
+  if (metric === 'pf') return val.toFixed(2);
+  if (metric === 'payoff') return '$' + val.toFixed(2);
+  if (metric === 'sharpe') return val.toFixed(2);
+  return '';
+}
+
 function renderTicker(){
   const hm = eaList.filter(e => e.mode === 'House Money').length;
   const cp = eaList.filter(e => e.mode === 'Compound').length;
-  const avgSharpe = (eaList.reduce((s,e)=>s+e.sharpe,0)/eaList.length).toFixed(2);
+  const p30 = eaList.filter(e => e.period_months === 30).length;
+  const p9 = eaList.filter(e => e.period_months === 9).length;
+
   document.getElementById('ticker').innerHTML = `
     <span class="ticker-item">EA ทั้งหมด <b>${eaList.length}</b></span>
     <span class="ticker-item hm">House Money <b>${hm}</b></span>
     <span class="ticker-item cp">Compound <b>${cp}</b></span>
-    <span class="ticker-item">Avg Sharpe <b>${avgSharpe}</b></span>
+    <span class="ticker-item period">30 Months <b>${p30}</b></span>
+    <span class="ticker-item period">9 Months <b>${p9}</b></span>
   `;
   document.getElementById('updated').textContent = 'Updated ' + DATA.generated;
 }
 
-function renderSummary(list){
-  const summary = document.getElementById('summary');
-  const portFilter = document.getElementById('portFilter').value;
-  const regimeFilter = document.getElementById('regimeFilter').value;
-
-  if(portFilter !== 'all' && list.length){
-    const first = list.find(e => e.port_group === portFilter) || list[0];
-    const members = [...new Set(list.flatMap(e => e.port_members || []))].join(', ');
-    summary.innerHTML = `<div class="summary-box">${portFilter} | Combine Capital ${first.combine_capital} | Members: ${members || '—'}</div>`;
-  } else if(regimeFilter !== 'all' && list.length){
-    const members = [...new Set(list.map(e => e.symbol))].join(', ');
-    summary.innerHTML = `<div class="summary-box">Members: ${members}</div>`;
-  } else {
-    summary.innerHTML = '';
-  }
-}
-
-function renderCardsAndCharts(list){
+function renderCardsAndCharts(list, activeMetric){
   const grid = document.getElementById('grid');
   activeCharts.forEach(c => c.destroy());
   activeCharts = [];
+
+  const sortDirection = activeMetric === 'dd' ? 'น้อยที่สุดขึ้นก่อน' : 'ดีที่สุดขึ้นก่อน';
+  document.getElementById('gridTitle').textContent = `ราย EA (Sorted by ${tabNames[activeMetric]} — ${sortDirection})`;
 
   if(!list.length){
     grid.innerHTML = '<div class="card"><div class="ea-name">No EA matches the current filters.</div></div>';
     return;
   }
 
-  // สร้างโครงสร้าง HTML สำหรับการ์ด
   grid.innerHTML = list.map((e, idx) => {
     const mc = modeClass(e.mode);
     const statusBadge = e.status !== 'Active' ? `<span class="badge status">${e.status}</span>` : '';
-    const patterns = (e.patterns || e.pattern || []).join(' · ');
+    const patterns = (e.patterns || []).join(' · ');
     const regimeLabel = e.is_adaptive_regime ? 'Adaptive' : 'Static';
-    const baseCap = e.base_capital || null;
-    const reserveCap = e.reserve_capital || null;
-    const capDetail = baseCap ? `${baseCap}+${reserveCap}R` : `${e.own_capital}`;
-    const capitalBadge = e.port_group ? `<span class="badge cap">[CAP ${e.own_capital} (${capDetail})] → [COMBINE ${e.combine_capital}]</span>` : '';
+    const capitalBadge = e.port_group ? `<span class="badge cap">[CAP ${e.own_capital || 0}] → [COMBINE ${e.combine_capital || 0}]</span>` : '';
     const patternBadge = patterns ? `<span class="badge pattern">${patterns} · ${regimeLabel}</span>` : '';
-    const reserveBadge = (e.patterns || []).includes('Reserve-Capital') ? `<span class="badge reserve">Reserve System</span>` : '';
+    
+    const focusedValue = getMetricValueString(e, activeMetric);
     
     return `
       <div class="card ${mc}">
+        <div class="rank-badge-card">#${idx + 1}</div>
         <div>
-          <div class="card-top">
+          <div class="card-top" style="padding-left: 18px;">
             <div>
               <div class="symbol">${e.symbol}</div>
               <div class="ea-name">${e.name}</div>
             </div>
-            <div><span class="badge ${mc}">${e.mode}</span>${statusBadge}</div>
+            <div class="badge-container">
+              <span class="badge ${mc}">${e.mode}</span>
+              <span class="badge period">${e.period_label}</span>
+              ${statusBadge}
+            </div>
           </div>
-          <div class="badge-row">
+          <div class="badge-container" style="margin-top:6px;">
             ${capitalBadge}
             ${patternBadge}
-            ${reserveBadge}
           </div>
         </div>
         
-        <!-- ส่วนพื้นที่แสดงผลกราฟ Spider -->
         <div class="chart-container">
           <canvas id="chart-${idx}"></canvas>
         </div>
 
+        <div class="focused-stat">
+          <span>Focused Metric: ${tabNames[activeMetric]}</span>
+          <b>${focusedValue}</b>
+        </div>
+
         <div class="net-profit">
           <span class="net-profit-label">Net Profit</span>
-          <span class="net-profit-value">${e.net_profit.toFixed(2)}%</span>
+          <span class="net-profit-value">${(e.net_profit || 0).toFixed(2)}%</span>
         </div>
       </div>
     `;
   }).join('');
 
-  // เริ่มวาดกราฟลงในการ์ดแต่ละใบด้วย Chart.js
   list.forEach((e, idx) => {
     const ctx = document.getElementById(`chart-${idx}`).getContext('2d');
     const color = modeColor(e.mode);
@@ -547,34 +570,27 @@ function renderCardsAndCharts(list){
   });
 }
 
-function renderGlobalComparisonAndRanking(list, sortBy){
-  // 1. เรนเดอร์ส่วนตารางอันดับ Rank List ขวามือ
+function renderGlobalComparisonAndRanking(list, activeMetric){
+  const rankListTitle = document.getElementById('rankListTitle');
+  rankListTitle.textContent = `RANKING BY ${tabNames[activeMetric].toUpperCase()}`;
+
   const rankList = document.getElementById('rankList');
   rankList.innerHTML = list.map((e, idx) => {
-    let displayVal = '';
-    if (sortBy === 'sharpe') displayVal = e.sharpe.toFixed(2);
-    if (sortBy === 'pf') displayVal = e.pf.toFixed(2);
-    if (sortBy === 'dd') displayVal = e.dd.toFixed(2) + '%';
-    if (sortBy === 'net_profit') displayVal = e.net_profit.toFixed(2) + '%';
-
     return `
       <div class="rank-item">
         <span class="rank-index">${idx + 1}</span>
-        <span class="rank-name" style="color:${modeColor(e.mode)}">${e.symbol}</span>
-        <span class="rank-val">${displayVal}</span>
+        <span class="rank-name" style="color:${modeColor(e.mode)}">${e.symbol} <small style="color:var(--muted)">(${e.period_label})</small></span>
+        <span class="rank-val">${getMetricValueString(e, activeMetric)}</span>
       </div>
     `;
   }).join('');
 
-  // 2. เรนเดอร์กราฟเปรียบเทียบรวม (จำกัดแสดงท็อป 5 ตัวแรกเพื่อไม่ให้เส้นกราฟซ้อนกันจนมองไม่รู้เรื่อง)
   if (globalRadarChart) globalRadarChart.destroy();
   const ctx = document.getElementById('globalRadarChart').getContext('2d');
   
   const displayLimit = Math.min(list.length, 5);
   const datasets = list.slice(0, displayLimit).map((e, idx) => {
     const baseColor = modeColor(e.mode);
-    // ปรับความทึบแสงของเส้นตามลำดับ Rank (อันดับแรกสุดจะเด่นชัดที่สุด)
-    const alpha = (1 - (idx * 0.15)).toFixed(2); 
     return {
       label: e.symbol,
       data: [
@@ -623,13 +639,18 @@ function renderGlobalComparisonAndRanking(list, sortBy){
 
 function applyFiltersAndRender(){
   const mode = document.querySelector('#modeFilter button.active').dataset.mode;
-  const query = document.getElementById('search').value.trim().toLowerCase();
-  const sortBy = document.getElementById('sortBy').value;
+  const period = document.getElementById('periodFilter').value;
   const port = document.getElementById('portFilter').value;
   const regime = document.getElementById('regimeFilter').value;
+  const query = document.getElementById('search').value.trim().toLowerCase();
   const selectedPatterns = Array.from(document.querySelectorAll('#patternFilters input:checked')).map(cb => cb.value);
+  const activeMetric = document.querySelector('#metricTabs button.active').dataset.metric;
 
   let list = eaList.filter(e => mode === 'all' || e.mode === mode);
+
+  if(period !== 'all'){
+    list = list.filter(e => e.period_months === parseInt(period));
+  }
   if(port !== 'all'){
     list = list.filter(e => e.port_group === port);
   }
@@ -638,22 +659,31 @@ function applyFiltersAndRender(){
   }
   if(selectedPatterns.length){
     list = list.filter(e => {
-      const patterns = e.patterns || e.pattern || [];
+      const patterns = e.patterns || [];
       return selectedPatterns.some(p => patterns.includes(p));
     });
   }
   if(query){
     list = list.filter(e => e.symbol.toLowerCase().includes(query) || e.name.toLowerCase().includes(query));
   }
-  list = [...list].sort((a,b) => {
-    if(sortBy === 'dd') return a.dd - b.dd;
-    return b[sortBy] - a[sortBy];
-  });
   
-  renderSummary(list);
-  renderCardsAndCharts(list);
-  renderGlobalComparisonAndRanking(list, sortBy);
+  if (activeMetric === 'dd') {
+    list = [...list].sort((a,b) => (a.dd || 0) - (b.dd || 0));
+  } else {
+    list = [...list].sort((a,b) => (b[activeMetric] || 0) - (a[activeMetric] || 0));
+  }
+  
+  renderCardsAndCharts(list, activeMetric);
+  renderGlobalComparisonAndRanking(list, activeMetric);
 }
+
+document.querySelectorAll('#metricTabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#metricTabs button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFiltersAndRender();
+  });
+});
 
 document.querySelectorAll('#modeFilter button').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -662,7 +692,8 @@ document.querySelectorAll('#modeFilter button').forEach(btn => {
     applyFiltersAndRender();
   });
 });
-document.getElementById('sortBy').addEventListener('change', applyFiltersAndRender);
+
+document.getElementById('periodFilter').addEventListener('change', applyFiltersAndRender);
 document.getElementById('portFilter').addEventListener('change', applyFiltersAndRender);
 document.getElementById('regimeFilter').addEventListener('change', applyFiltersAndRender);
 document.getElementById('search').addEventListener('input', applyFiltersAndRender);
