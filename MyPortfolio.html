@@ -37,9 +37,12 @@
       0%, 100% { opacity: 1; }
       50% { opacity: .4; }
     }
+    /* ซ่อน Scrollbar ของ Modal */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white pb-12">
+<body class="min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white pb-24">
 
   <!-- ========================================== -->
   <!-- 1. หน้าต่างกรอกรหัสผ่าน 6 หลัก (PIN LOCK) -->
@@ -54,7 +57,6 @@
       <h2 class="text-xl font-bold text-white font-brand mb-1" id="lblPinTitle">เข้าสู่ระบบพอร์ตลงทุน</h2>
       <p class="text-xs text-gray-400 mb-6" id="lblPinDesc">กรุณากรอกรหัสความปลอดภัย 6 หลัก</p>
       
-      <!-- จุดแสดงสถานะ PIN -->
       <div class="flex justify-center gap-3 mb-8">
         <div class="pin-dot w-4 h-4 rounded-full border-2 border-gray-600 bg-transparent transition-all"></div>
         <div class="pin-dot w-4 h-4 rounded-full border-2 border-gray-600 bg-transparent transition-all"></div>
@@ -66,7 +68,6 @@
 
       <div id="pinError" class="text-xs text-rose-400 h-5 mb-4 font-medium"></div>
 
-      <!-- แป้นตัวเลข Keypad -->
       <div class="grid grid-cols-3 gap-3 font-num">
         <button onclick="pressPin('1')" class="h-14 rounded-xl bg-[#161b22] border border-[#30363d] text-xl font-semibold text-white hover:bg-blue-600/20 active:scale-95 transition">1</button>
         <button onclick="pressPin('2')" class="h-14 rounded-xl bg-[#161b22] border border-[#30363d] text-xl font-semibold text-white hover:bg-blue-600/20 active:scale-95 transition">2</button>
@@ -107,15 +108,12 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <!-- ปุ่มสลับภาษา -->
         <button onclick="toggleLang()" class="px-2.5 py-1 text-xs rounded-lg border border-[#30363d] bg-[#21262d] text-gray-300 hover:bg-[#30363d] font-semibold transition">
           <span id="btnLangLabel">EN</span>
         </button>
-        <!-- ปุ่มดึงข้อมูลใหม่ -->
         <button onclick="loadDashboardData()" class="p-2 text-gray-400 hover:text-white rounded-lg border border-[#30363d] bg-[#21262d] transition active:rotate-180" title="รีเฟรช">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
         </button>
-        <!-- ปุ่มออกจากระบบ -->
         <button onclick="logout()" class="p-2 text-rose-400 hover:text-rose-300 rounded-lg border border-[#30363d] bg-[#21262d] transition" title="ออกจากระบบ">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
         </button>
@@ -128,16 +126,14 @@
   <!-- ========================================== -->
   <main class="max-w-7xl mx-auto px-4 pt-6 flex-1 w-full space-y-6">
 
-    <!-- แถบแจ้งเตือนสถานะกำลังดึงข้อมูล -->
+    <!-- แถบแจ้งเตือนสถานะ -->
     <div id="loadingBanner" class="hidden flex items-center justify-center gap-2 p-3 rounded-xl bg-blue-950/40 border border-blue-800/50 text-blue-300 text-xs font-medium">
       <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
       <span>กำลังประสานข้อมูลกับฐานข้อมูล...</span>
     </div>
 
-    <!-- แถวที่ 1: การ์ดตัวเลขสรุป 4 กล่อง (KPI CARDS) -->
+    <!-- แถวที่ 1: การ์ดตัวเลขสรุป 4 กล่อง -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-      
-      <!-- การ์ด 1: มูลค่าสุทธิรวม (Net Worth) -->
       <div class="card-dark rounded-2xl p-4 md:p-5 card-hover transition">
         <div class="text-[11px] md:text-xs font-medium text-gray-400 mb-1 flex items-center justify-between">
           <span class="lang-text" data-th="มูลค่าสุทธิรวม" data-en="Net Worth">มูลค่าสุทธิรวม</span>
@@ -149,7 +145,6 @@
         </div>
       </div>
 
-      <!-- การ์ด 2: พอร์ตลงทุนปัจจุบัน (Invest Market Value) -->
       <div class="card-dark rounded-2xl p-4 md:p-5 card-hover transition">
         <div class="text-[11px] md:text-xs font-medium text-gray-400 mb-1 flex items-center justify-between">
           <span class="lang-text" data-th="มูลค่าลงทุนปัจจุบัน" data-en="Invest Market Value">มูลค่าลงทุนปัจจุบัน</span>
@@ -161,7 +156,6 @@
         </div>
       </div>
 
-      <!-- การ์ด 3: กำไร / ขาดทุน รวม (Total P/L) -->
       <div class="card-dark rounded-2xl p-4 md:p-5 card-hover transition">
         <div class="text-[11px] md:text-xs font-medium text-gray-400 mb-1 flex items-center justify-between">
           <span class="lang-text" data-th="กำไร / ขาดทุน ทั้งหมด" data-en="Total Profit/Loss">กำไร / ขาดทุน ทั้งหมด</span>
@@ -173,24 +167,48 @@
         </div>
       </div>
 
-      <!-- การ์ด 4: กระแสเงินสดคงเหลือ (Available Cash) -->
       <div class="card-dark rounded-2xl p-4 md:p-5 card-hover transition">
         <div class="text-[11px] md:text-xs font-medium text-gray-400 mb-1 flex items-center justify-between">
           <span class="lang-text" data-th="เงินสดและเงินฝาก" data-en="Available Cash">เงินสดและเงินฝาก</span>
           <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-num">THB</span>
         </div>
         <div class="text-xl md:text-2xl font-bold text-emerald-400 font-num tracking-tight" id="valCashTHB">0.00</div>
-        <div class="text-[11px] text-gray-400 mt-2 flex items-center gap-1">
+        <div class="text-[11px] text-gray-400 mt-2 flex items-center justify-between">
           <span>สภาพคล่องพร้อมใช้</span>
+          <span id="boxReservedCash" class="hidden text-amber-400 text-[10px] font-num font-semibold"></span>
         </div>
       </div>
-
     </div>
 
-    <!-- แถวที่ 2: กราฟสรุปพอร์ตโฟลิโอ (CHARTS) -->
+    <!-- กล่องตารางพิเศษ: รายการรอจับคู่ (W-BUY / W-SELL) -->
+    <div id="pendingOrdersSection" class="hidden card-dark rounded-2xl overflow-hidden border border-amber-500/40 bg-amber-950/10">
+      <div class="p-4 border-b border-[#30363d] flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-400 pulse-dot"></span>
+          <h2 class="text-sm font-bold text-amber-300 font-brand">คำสั่งรอจับคู่ (Pending Limit Orders)</h2>
+        </div>
+        <span class="text-xs text-gray-400" id="pendingCountBadge">0 รายการ</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-[#21262d]/50 text-gray-400 border-b border-[#30363d]">
+            <tr>
+              <th class="py-2.5 px-4">วันที่</th>
+              <th class="py-2.5 px-3">ประเภท</th>
+              <th class="py-2.5 px-3">สัญลักษณ์</th>
+              <th class="py-2.5 px-3 text-right">จำนวน</th>
+              <th class="py-2.5 px-3 text-right">ราคาตั้งรอ</th>
+              <th class="py-2.5 px-3 text-right">มูลค่ารวมสุทธิ</th>
+              <th class="py-2.5 px-4 text-center">จัดการคำสั่ง</th>
+            </tr>
+          </thead>
+          <tbody id="pendingTableBody" class="divide-y divide-[#30363d] font-num"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- แถวที่ 2: กราฟสรุปพอร์ตโฟลิโอ -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-      
-      <!-- กราฟที่ 1: สัดส่วนสินทรัพย์ตามกลุ่ม (Donut Chart) -->
       <div class="card-dark rounded-2xl p-5 flex flex-col justify-between">
         <div>
           <h2 class="text-xs font-bold text-gray-300 uppercase tracking-wider mb-1 lang-text" data-th="สัดส่วนพอร์ตตามกลุ่มการลงทุน" data-en="Portfolio Allocation by Group">สัดส่วนพอร์ตตามกลุ่มการลงทุน</h2>
@@ -202,7 +220,6 @@
         <div id="groupLegend" class="mt-4 space-y-1.5 text-xs"></div>
       </div>
 
-      <!-- กราฟที่ 2: ผลกำไร/ขาดทุน รายตัว (Bar Chart) -->
       <div class="card-dark rounded-2xl p-5 lg:col-span-2 flex flex-col justify-between">
         <div>
           <h2 class="text-xs font-bold text-gray-300 uppercase tracking-wider mb-1 lang-text" data-th="กำไร / ขาดทุน ตามรายหลักทรัพย์ (USD)" data-en="Unrealized P/L by Asset (USD)">กำไร / ขาดทุน ตามรายหลักทรัพย์ (USD)</h2>
@@ -212,10 +229,9 @@
           <canvas id="chartAssetPnl"></canvas>
         </div>
       </div>
-
     </div>
 
-    <!-- แถวที่ 3: ตารางรายการสถานะหลักทรัพย์ (ASSET POSITIONS TABLE) -->
+    <!-- แถวที่ 3: ตารางรายการสถานะหลักทรัพย์ -->
     <div class="card-dark rounded-2xl overflow-hidden border border-[#30363d]">
       <div class="p-4 md:p-5 border-b border-[#30363d] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
@@ -227,7 +243,6 @@
         </div>
       </div>
 
-      <!-- ตาราง Responsive -->
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs">
           <thead class="bg-[#21262d] text-gray-400 font-semibold uppercase border-b border-[#30363d]">
@@ -254,15 +269,177 @@
   </main>
 
   <!-- ========================================== -->
-  <!-- 4. ส่วนตรรกะการทำงาน (JAVASCRIPT) -->
+  <!-- 4. ปุ่มลอยสำหรับเปิดเมนูเพิ่มรายการ (FAB) -->
+  <!-- ========================================== -->
+  <div class="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
+    <!-- เมนูย่อย 2 ปุ่ม -->
+    <div id="fabSubMenu" class="hidden flex flex-col items-end gap-2 transition-all duration-200">
+      <button onclick="openModal('modalCashflow'); toggleFab();" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#21262d] border border-[#30363d] text-emerald-400 hover:bg-[#30363d] shadow-xl text-xs font-semibold">
+        <span>💵 บันทึกกระแสเงินสด (Cashflow)</span>
+      </button>
+      <button onclick="openModal('modalTrade'); toggleFab();" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-blue-600 text-white hover:bg-blue-500 shadow-xl text-xs font-semibold">
+        <span>📈 บันทึกการลงทุน (Trade / Order)</span>
+      </button>
+    </div>
+
+    <button onclick="toggleFab()" id="fabMainBtn" class="w-14 h-14 rounded-full bg-blue-600 hover:bg-blue-500 active:scale-95 text-white flex items-center justify-center shadow-2xl shadow-blue-500/40 transition">
+      <svg id="fabIcon" class="w-6 h-6 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 5. ฟอร์ม Modal บันทึกการลงทุน (Trade Form) -->
+  <!-- ========================================== -->
+  <div id="modalTrade" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="card-dark rounded-2xl w-full max-w-lg border border-[#30363d] overflow-hidden max-h-[90vh] flex flex-col">
+      <div class="p-4 border-b border-[#30363d] flex items-center justify-between">
+        <h3 class="text-sm font-bold text-white font-brand">บันทึกรายการลงทุน / คำสั่งซื้อขาย</h3>
+        <button onclick="closeModal('modalTrade')" class="text-gray-400 hover:text-white">&times;</button>
+      </div>
+
+      <div class="p-5 overflow-y-auto space-y-4 no-scrollbar text-xs">
+        
+        <!-- ประเภทคำสั่ง 4 แบบ -->
+        <div>
+          <label class="block text-gray-400 mb-1.5 font-medium">ประเภทคำสั่ง (Order Side)</label>
+          <div class="grid grid-cols-4 gap-2 font-num font-semibold text-center">
+            <button type="button" onclick="setSide('BUY')" id="btnSideBUY" class="py-2.5 rounded-xl border border-emerald-500 bg-emerald-500/20 text-emerald-300">BUY</button>
+            <button type="button" onclick="setSide('W-BUY')" id="btnSideWBUY" class="py-2.5 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400">W-BUY</button>
+            <button type="button" onclick="setSide('SELL')" id="btnSideSELL" class="py-2.5 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400">SELL</button>
+            <button type="button" onclick="setSide('W-SELL')" id="btnSideWSELL" class="py-2.5 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400">W-SELL</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-gray-400 mb-1">วันที่ทำรายการ</label>
+            <input type="date" id="tradeDate" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num focus:border-blue-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">กลุ่มการลงทุน</label>
+            <select id="tradeGroup" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white focus:border-blue-500 focus:outline-none"></select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div class="col-span-1">
+            <label class="block text-gray-400 mb-1">สัญลักษณ์ (Ticker)</label>
+            <input type="text" id="tradeTicker" placeholder="เช่น QQQ" oninput="this.value = this.value.toUpperCase(); triggerFeeCalc();" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num uppercase focus:border-blue-500 focus:outline-none">
+          </div>
+          <div class="col-span-1">
+            <label class="block text-gray-400 mb-1">จำนวนหุ้น (Shares)</label>
+            <input type="number" step="any" id="tradeShares" placeholder="0.00" oninput="triggerFeeCalc()" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num focus:border-blue-500 focus:outline-none">
+          </div>
+          <div class="col-span-1">
+            <label class="block text-gray-400 mb-1">ราคาต่อหุ้น (USD)</label>
+            <input type="number" step="any" id="tradePrice" placeholder="0.00" oninput="triggerFeeCalc()" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num focus:border-blue-500 focus:outline-none">
+          </div>
+        </div>
+
+        <!-- กล่องคำนวณค่าธรรมเนียมสด Real-time -->
+        <div class="bg-[#0d1117] rounded-xl p-3 border border-[#30363d] space-y-1.5 font-num text-[11px]">
+          <div class="flex justify-between text-gray-400">
+            <span>มูลค่ารวมก่อนค่าธรรมเนียม (Gross):</span>
+            <span id="calcGross">$0.00</span>
+          </div>
+          <div class="flex justify-between text-gray-500">
+            <span>ค่านายหน้า (0.15%) + VAT (7%):</span>
+            <span id="calcComVat">$0.00</span>
+          </div>
+          <div class="flex justify-between text-gray-500" id="rowSecTaf">
+            <span>ค่าตลาด (SEC 0.00208%) + TAF:</span>
+            <span id="calcSecTaf">$0.00</span>
+          </div>
+          <div class="pt-1.5 border-t border-[#30363d] flex justify-between font-bold text-white text-xs">
+            <span>ยอดสุทธิ (Net USD):</span>
+            <span id="calcNetUSD" class="text-blue-400">$0.00</span>
+          </div>
+          <div class="flex justify-between text-gray-400 text-[11px]">
+            <span>คิดเป็นเงินบาท (Net THB):</span>
+            <span id="calcNetTHB">0.00 ฿</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-gray-400 mb-1">บันทึกช่วยจำ (Note)</label>
+          <input type="text" id="tradeNote" placeholder="รายละเอียดเพิ่มเติม (ถ้ามี)" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white focus:border-blue-500 focus:outline-none">
+        </div>
+
+      </div>
+
+      <div class="p-4 border-t border-[#30363d] flex justify-end gap-2 bg-[#161b22]">
+        <button onclick="closeModal('modalTrade')" class="px-4 py-2 rounded-xl text-gray-400 hover:text-white">ยกเลิก</button>
+        <button onclick="submitTradeForm()" id="btnSaveTrade" class="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold flex items-center gap-2">
+          <span>บันทึกข้อมูล</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 6. ฟอร์ม Modal บันทึกกระแสเงินสด (Cashflow) -->
+  <!-- ========================================== -->
+  <div id="modalCashflow" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="card-dark rounded-2xl w-full max-w-md border border-[#30363d] overflow-hidden flex flex-col">
+      <div class="p-4 border-b border-[#30363d] flex items-center justify-between">
+        <h3 class="text-sm font-bold text-white font-brand">บันทึกกระแสเงินสด (Cashflow)</h3>
+        <button onclick="closeModal('modalCashflow')" class="text-gray-400 hover:text-white">&times;</button>
+      </div>
+
+      <div class="p-5 space-y-4 text-xs">
+        <div>
+          <label class="block text-gray-400 mb-1.5 font-medium">ทิศทางเงิน</label>
+          <div class="grid grid-cols-2 gap-2 font-semibold">
+            <button type="button" onclick="setCashType('out')" id="btnCashOut" class="py-2.5 rounded-xl border border-rose-500 bg-rose-500/20 text-rose-300">โอนออก / จ่ายออก</button>
+            <button type="button" onclick="setCashType('in')" id="btnCashIn" class="py-2.5 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400">รับเข้า / ถอนกำไร</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-gray-400 mb-1">วันที่ทำรายการ</label>
+            <input type="date" id="cashDate" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num focus:border-blue-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">หมวดหมู่</label>
+            <select id="cashCategory" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white focus:border-blue-500 focus:outline-none"></select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-gray-400 mb-1">บัญชีที่ใช้</label>
+            <select id="cashAccount" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white focus:border-blue-500 focus:outline-none"></select>
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">จำนวนเงิน (บาท)</label>
+            <input type="number" step="any" id="cashAmount" placeholder="0.00" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num font-bold focus:border-blue-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-gray-400 mb-1">บันทึกช่วยจำ (Note)</label>
+          <input type="text" id="cashNote" placeholder="รายละเอียดเพิ่มเติม (ถ้ามี)" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white focus:border-blue-500 focus:outline-none">
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-[#30363d] flex justify-end gap-2 bg-[#161b22]">
+        <button onclick="closeModal('modalCashflow')" class="px-4 py-2 rounded-xl text-gray-400 hover:text-white">ยกเลิก</button>
+        <button onclick="submitCashflowForm()" id="btnSaveCash" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold flex items-center gap-2">
+          <span>บันทึกเงินสด</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 7. สคริปต์การทำงาน (JAVASCRIPT) -->
   <!-- ========================================== -->
   <script>
-    /* -------------------------------------------------------------
-     * ★ ตั้งค่า Web App URL ของคุณที่นี่
-     * ------------------------------------------------------------- */
     const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbw_P74pybIzkQ0SSa0RuO8lFgjbgDh5KSerIoL9NcNR1IVAOJ0Jyz3Vb4-khVlsEfNN/exec';
 
-    /* ตัวแปรระบบ */
     let currentToken = localStorage.getItem('portfolio_token') || '';
     let currentLang  = localStorage.getItem('portfolio_lang') || 'th';
     let enteredPin   = '';
@@ -270,35 +447,22 @@
     let chartGroup   = null;
     let chartPnl     = null;
 
-    /* พจนานุกรมแปลภาษา */
+    let selectedSide     = 'BUY';
+    let selectedCashType = 'out';
+
     const I18N = {
       th: {
         pinTitle: "เข้าสู่ระบบพอร์ตลงทุน",
         pinDesc: "กรุณากรอกรหัสความปลอดภัย 6 หลัก",
-        btnLang: "EN",
-        netWorth: "มูลค่าสุทธิรวม",
-        marketValue: "มูลค่าลงทุนปัจจุบัน",
-        totalPnl: "กำไร / ขาดทุน ทั้งหมด",
-        cash: "เงินสดและเงินฝาก",
-        holdings: "สถานะการถือครองหลักทรัพย์",
-        allocation: "สัดส่วนพอร์ตตามกลุ่มการลงทุน"
+        btnLang: "EN"
       },
       en: {
         pinTitle: "Portfolio Security Access",
         pinDesc: "Please enter your 6-digit security PIN",
-        btnLang: "TH",
-        netWorth: "Total Net Worth",
-        marketValue: "Invest Market Value",
-        totalPnl: "Total Profit/Loss",
-        cash: "Cash & Reserves",
-        holdings: "Portfolio Holdings",
-        allocation: "Asset Group Allocation"
+        btnLang: "TH"
       }
     };
 
-    /* -------------------------------------------------------------
-     * ระบบเชื่อมต่อ JSONP
-     * ------------------------------------------------------------- */
     function apiCall(action, payload = {}, callback) {
       const cbName = 'jsonp_cb_' + Math.round(100000 * Math.random());
       const script = document.createElement('script');
@@ -322,32 +486,25 @@
       document.body.appendChild(script);
     }
 
-    /* -------------------------------------------------------------
-     * ฟังก์ชันระบบ PIN CODE
-     * ------------------------------------------------------------- */
+    /* PIN Lock System */
     function pressPin(n) {
       if (enteredPin.length < 6) {
         enteredPin += n;
         updatePinDots();
-        if (enteredPin.length === 6) {
-          submitPin();
-        }
+        if (enteredPin.length === 6) submitPin();
       }
     }
-
     function deletePin() {
       if (enteredPin.length > 0) {
         enteredPin = enteredPin.slice(0, -1);
         updatePinDots();
       }
     }
-
     function clearPin() {
       enteredPin = '';
       updatePinDots();
       document.getElementById('pinError').innerText = '';
     }
-
     function updatePinDots() {
       const dots = document.querySelectorAll('.pin-dot');
       dots.forEach((dot, index) => {
@@ -358,11 +515,9 @@
         }
       });
     }
-
     function submitPin() {
       const errBox = document.getElementById('pinError');
       errBox.innerText = 'กำลังตรวจสอบรหัส...';
-      
       apiCall('login', { pin: enteredPin }, (res) => {
         if (res.ok && res.data && res.data.token) {
           currentToken = res.data.token;
@@ -377,7 +532,6 @@
         }
       });
     }
-
     function logout() {
       currentToken = '';
       localStorage.removeItem('portfolio_token');
@@ -386,9 +540,7 @@
       document.getElementById('pinOverlay').classList.remove('hidden');
     }
 
-    /* -------------------------------------------------------------
-     * โหลดข้อมูล Dashboard
-     * ------------------------------------------------------------- */
+    /* โหลดข้อมูล Dashboard */
     function loadDashboardData() {
       const banner = document.getElementById('loadingBanner');
       banner.classList.remove('hidden');
@@ -396,32 +548,24 @@
       apiCall('bootstrap', {}, (res) => {
         banner.classList.add('hidden');
         if (!res.ok) {
-          if (res.error && res.error.includes('บัตรผ่าน')) {
-            logout();
-          } else {
-            alert('เกิดข้อผิดพลาด: ' + res.error);
-          }
+          if (res.error && res.error.includes('บัตรผ่าน')) logout();
+          else alert('เกิดข้อผิดพลาด: ' + res.error);
           return;
         }
-
         appData = res.data;
         renderDashboard();
+        populateDropdowns();
       });
     }
 
-    /* -------------------------------------------------------------
-     * แสดงผลข้อมูลลงหน้าจอ (Render)
-     * ------------------------------------------------------------- */
     function renderDashboard() {
       if (!appData) return;
       const sum = appData.summary || {};
-      const fx  = sum.fxRate || 32.92;
+      const fx  = sum.fxRate || 33.00;
 
-      // ปรับปรุง Header
       document.getElementById('headerFxRate').innerText = fx.toFixed(2);
       document.getElementById('lblLastUpdate').innerText = (appData.serverTime || '').split(' ')[1] || new Date().toLocaleTimeString();
 
-      // สรุป 4 กล่อง
       document.getElementById('valNetWorth').innerText = formatNum(sum.netWorthTHB) + ' ฿';
       document.getElementById('valMarketTHB').innerText = formatNum(sum.marketTHB) + ' ฿';
       document.getElementById('valMarketUSD').innerText = formatNum(sum.marketUSD);
@@ -440,10 +584,85 @@
 
       document.getElementById('valCashTHB').innerText = formatNum(sum.cashTHB) + ' ฿';
 
-      // วาดตารางและกราฟ
+      // แสดงเงินที่กันไว้ (Reserved Funds) จาก W-BUY
+      const resvBox = document.getElementById('boxReservedCash');
+      if (sum.reservedCashUSD > 0) {
+        resvBox.innerText = `(กันไว้ $${formatNum(sum.reservedCashUSD)})`;
+        resvBox.classList.remove('hidden');
+      } else {
+        resvBox.classList.add('hidden');
+      }
+
+      renderPendingOrders();
       renderPositionsTable();
       renderGroupChart();
       renderAssetPnlChart();
+    }
+
+    /* กล่องคำสั่งรอจับคู่ */
+    function renderPendingOrders() {
+      const orders = (appData.summary && appData.summary.pendingOrders) || [];
+      const section = document.getElementById('pendingOrdersSection');
+      const tbody = document.getElementById('pendingTableBody');
+      const badge = document.getElementById('pendingCountBadge');
+
+      if (!orders.length) {
+        section.classList.add('hidden');
+        return;
+      }
+
+      section.classList.remove('hidden');
+      badge.innerText = `${orders.length} คำสั่งค้าง`;
+
+      let html = '';
+      orders.forEach(o => {
+        const isBuy = o.side === 'W-BUY';
+        const sideBadge = isBuy
+          ? `<span class="px-2 py-0.5 rounded text-[10px] bg-blue-500/20 text-blue-300 border border-blue-500/40">รอซื้อ (W-BUY)</span>`
+          : `<span class="px-2 py-0.5 rounded text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40">รอขาย (W-SELL)</span>`;
+
+        html += `
+          <tr class="hover:bg-[#1c2128]">
+            <td class="py-2.5 px-4 text-gray-400">${o.date}</td>
+            <td class="py-2.5 px-3">${sideBadge}</td>
+            <td class="py-2.5 px-3 font-bold text-white">${o.ticker}</td>
+            <td class="py-2.5 px-3 text-right text-gray-200">${formatNum(o.shares, 4)}</td>
+            <td class="py-2.5 px-3 text-right font-semibold text-white">$${formatNum(o.price, 2)}</td>
+            <td class="py-2.5 px-3 text-right text-gray-300">$${formatNum(o.netUSD, 2)}</td>
+            <td class="py-2.5 px-4 text-center space-x-1.5">
+              <button onclick="executeOrder('${o.id}')" class="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-[10px] transition">
+                ✔ จับคู่สำเร็จ
+              </button>
+              <button onclick="cancelPendingOrder('${o.id}')" class="px-2.5 py-1 rounded bg-rose-600/20 hover:bg-rose-600 border border-rose-500 text-rose-300 hover:text-white font-semibold text-[10px] transition">
+                ✖ ยกเลิกคำสั่ง
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    }
+
+    function executeOrder(id) {
+      if (!confirm('ยืนยันว่าคำสั่งนี้จับคู่ในกระดานสำเร็จแล้วใช่หรือไม่?')) return;
+      apiCall('executeOrder', { id: id }, (res) => {
+        if (res.ok) {
+          loadDashboardData();
+        } else {
+          alert('ผิดพลาด: ' + res.error);
+        }
+      });
+    }
+
+    function cancelPendingOrder(id) {
+      if (!confirm('ต้องการยกเลิกคำสั่งรอจับคู่นี้ และคืนยอดเงิน/สถานะใช่หรือไม่?')) return;
+      apiCall('deleteTrade', { id: id }, (res) => {
+        if (res.ok) {
+          loadDashboardData();
+        } else {
+          alert('ผิดพลาด: ' + res.error);
+        }
+      });
     }
 
     /* ตารางถือครอง */
@@ -478,9 +697,7 @@
         const low52  = Number(m.low52) || price * 0.8;
         const high52 = Number(m.high52) || price * 1.2;
         let posPct   = 50;
-        if (high52 > low52) {
-          posPct = Math.min(100, Math.max(0, ((price - low52) / (high52 - low52)) * 100));
-        }
+        if (high52 > low52) posPct = Math.min(100, Math.max(0, ((price - low52) / (high52 - low52)) * 100));
 
         const isUp = diffUSD >= 0;
 
@@ -492,7 +709,7 @@
             </td>
             <td class="py-3 px-3">
               <span class="px-2 py-0.5 rounded text-[10px] font-sans" style="background-color: ${g.color}15; color: ${g.color}; border: 1px solid ${g.color}30;">
-                ${currentLang === 'th' ? g.nameTh : (g.nameEn || g.nameTh)}
+                ${g.nameTh}
               </span>
             </td>
             <td class="py-3 px-3 text-right text-gray-200">${formatNum(p.shares, 4)}</td>
@@ -515,11 +732,9 @@
           </tr>
         `;
       });
-
       tbody.innerHTML = html;
     }
 
-    /* กราฟสัดส่วนกลุ่ม */
     function renderGroupChart() {
       const ctx = document.getElementById('chartGroupAllocation').getContext('2d');
       const positions = (appData.summary && appData.summary.positions) || [];
@@ -532,7 +747,7 @@
       positions.forEach(p => {
         if (p.shares <= 0) return;
         const g = grpMap[p.group] || { nameTh: p.group || 'อื่นๆ', color: '#8b949e' };
-        const key = currentLang === 'th' ? g.nameTh : (g.nameEn || g.nameTh);
+        const key = g.nameTh;
         if (!groupTotals[key]) groupTotals[key] = { value: 0, color: g.color || '#58a6ff' };
         groupTotals[key].value += p.marketUSD;
       });
@@ -542,33 +757,22 @@
       const colors = labels.map(k => groupTotals[k].color);
 
       if (chartGroup) chartGroup.destroy();
-
-      if (!labels.length) {
-        return;
-      }
+      if (!labels.length) return;
 
       chartGroup = new Chart(ctx, {
         type: 'doughnut',
         data: {
           labels: labels,
-          datasets: [{
-            data: data,
-            backgroundColor: colors,
-            borderWidth: 0,
-            hoverOffset: 4
-          }]
+          datasets: [{ data: data, backgroundColor: colors, borderWidth: 0, hoverOffset: 4 }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
-          },
+          plugins: { legend: { display: false } },
           cutout: '72%'
         }
       });
 
-      // Legend ด้านล่าง
       const legendBox = document.getElementById('groupLegend');
       let legHtml = '';
       const totalVal = data.reduce((a,b)=>a+b, 0);
@@ -587,7 +791,6 @@
       legendBox.innerHTML = legHtml;
     }
 
-    /* กราฟแท่งกำไรขาดทุนรายตัว */
     function renderAssetPnlChart() {
       const ctx = document.getElementById('chartAssetPnl').getContext('2d');
       const positions = (appData.summary && appData.summary.positions) || [];
@@ -598,19 +801,13 @@
       const colors   = data.map(v => v >= 0 ? '#3fb950' : '#f85149');
 
       if (chartPnl) chartPnl.destroy();
-
       if (!labels.length) return;
 
       chartPnl = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: labels,
-          datasets: [{
-            data: data,
-            backgroundColor: colors,
-            borderRadius: 6,
-            maxBarThickness: 32
-          }]
+          datasets: [{ data: data, backgroundColor: colors, borderRadius: 6, maxBarThickness: 32 }]
         },
         options: {
           responsive: true,
@@ -619,34 +816,195 @@
             legend: { display: false },
             tooltip: {
               callbacks: {
-                label: function(c) {
-                  const val = c.raw || 0;
-                  return `${val >= 0 ? '+' : ''}$${val.toFixed(2)}`;
-                }
+                label: (c) => `${(c.raw||0)>=0?'+':''}$${Number(c.raw||0).toFixed(2)}`
               }
             }
           },
           scales: {
-            x: {
-              grid: { display: false },
-              ticks: { color: '#8b949e', font: { family: 'JetBrains Mono' } }
-            },
-            y: {
-              grid: { color: '#21262d' },
-              ticks: {
-                color: '#8b949e',
-                font: { family: 'JetBrains Mono' },
-                callback: function(val) { return '$' + val; }
-              }
-            }
+            x: { grid: { display: false }, ticks: { color: '#8b949e', font: { family: 'JetBrains Mono' } } },
+            y: { grid: { color: '#21262d' }, ticks: { color: '#8b949e', font: { family: 'JetBrains Mono' }, callback: (v) => '$' + v } }
           }
         }
       });
     }
 
     /* -------------------------------------------------------------
-     * ยูทิลิตี้ (Utility Helpers)
+     * ระบบ Form & Modal Logic
      * ------------------------------------------------------------- */
+    function toggleFab() {
+      const menu = document.getElementById('fabSubMenu');
+      const icon = document.getElementById('fabIcon');
+      menu.classList.toggle('hidden');
+      icon.classList.toggle('rotate-45');
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+      const today = new Date().toISOString().split('T')[0];
+      if (id === 'modalTrade') {
+        document.getElementById('tradeDate').value = today;
+        triggerFeeCalc();
+      } else if (id === 'modalCashflow') {
+        document.getElementById('cashDate').value = today;
+      }
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function populateDropdowns() {
+      if (!appData) return;
+      
+      const grpSel = document.getElementById('tradeGroup');
+      grpSel.innerHTML = (appData.groups || []).map(g => `<option value="${g.nameTh}">${g.nameTh}</option>`).join('');
+
+      const catSel = document.getElementById('cashCategory');
+      catSel.innerHTML = (appData.categories || []).map(c => `<option value="${c.nameTh}">${c.nameTh}</option>`).join('');
+
+      const accSel = document.getElementById('cashAccount');
+      accSel.innerHTML = (appData.accounts || []).map(a => `<option value="${a.name}">${a.name} (${a.currency})</option>`).join('');
+    }
+
+    function setSide(side) {
+      selectedSide = side;
+      ['BUY','W-BUY','SELL','W-SELL'].forEach(s => {
+        const btn = document.getElementById('btnSide' + s.replace('-',''));
+        if (s === side) {
+          if (s.includes('BUY')) {
+            btn.className = "py-2.5 rounded-xl border border-emerald-500 bg-emerald-500/20 text-emerald-300 font-bold";
+          } else {
+            btn.className = "py-2.5 rounded-xl border border-rose-500 bg-rose-500/20 text-rose-300 font-bold";
+          }
+        } else {
+          btn.className = "py-2.5 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400";
+        }
+      });
+      triggerFeeCalc();
+    }
+
+    function setCashType(type) {
+      selectedCashType = type;
+      const btnOut = document.getElementById('btnCashOut');
+      const btnIn  = document.getElementById('btnCashIn');
+      if (type === 'out') {
+        btnOut.className = "py-2.5 rounded-xl border border-rose-500 bg-rose-500/20 text-rose-300 font-bold";
+        btnIn.className  = "py-2.5 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400";
+      } else {
+        btnIn.className  = "py-2.5 rounded-xl border border-emerald-500 bg-emerald-500/20 text-emerald-300 font-bold";
+        btnOut.className = "py-2.5 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400";
+      }
+    }
+
+    function triggerFeeCalc() {
+      const shares = Number(document.getElementById('tradeShares').value) || 0;
+      const price  = Number(document.getElementById('tradePrice').value) || 0;
+      const gross  = shares * price;
+      const isSell = selectedSide === 'SELL' || selectedSide === 'W-SELL';
+
+      const s = (appData && appData.settings) || { commissionRate: 0.0015, vatRate: 0.07, secFeeRate: 0.0000208, tafFeePerShare: 0.000166, tafFeeMin: 0.01 };
+      const fx = (appData && appData.summary && appData.summary.fxRate) || 33.00;
+
+      const commission = Math.round((gross * Number(s.commissionRate || 0.0015)) * 100) / 100;
+      const vat        = Math.round((commission * Number(s.vatRate || 0.07)) * 100) / 100;
+      const secFee     = isSell ? Math.round((gross * Number(s.secFeeRate || 0.0000208)) * 100) / 100 : 0;
+      const tafRaw     = shares * Number(s.tafFeePerShare || 0.000166);
+      const tafFee     = isSell ? Math.max(Number(s.tafFeeMin || 0.01), Math.ceil(tafRaw * 100) / 100) : 0;
+      const totalFee   = commission + vat + secFee + tafFee;
+      const netUSD     = isSell ? (gross - totalFee) : (gross + totalFee);
+
+      document.getElementById('calcGross').innerText = '$' + formatNum(gross, 2);
+      document.getElementById('calcComVat').innerText = '$' + formatNum(commission + vat, 2);
+      
+      const secTafEl = document.getElementById('rowSecTaf');
+      if (isSell) {
+        secTafEl.classList.remove('hidden');
+        document.getElementById('calcSecTaf').innerText = '$' + formatNum(secFee + tafFee, 2);
+      } else {
+        secTafEl.classList.add('hidden');
+      }
+
+      document.getElementById('calcNetUSD').innerText = '$' + formatNum(netUSD, 2);
+      document.getElementById('calcNetTHB').innerText = formatNum(netUSD * fx, 2) + ' ฿';
+    }
+
+    function submitTradeForm() {
+      const ticker = document.getElementById('tradeTicker').value.trim();
+      const shares = Number(document.getElementById('tradeShares').value);
+      const price  = Number(document.getElementById('tradePrice').value);
+      const date   = document.getElementById('tradeDate').value;
+      const group  = document.getElementById('tradeGroup').value;
+      const note   = document.getElementById('tradeNote').value.trim();
+
+      if (!ticker) return alert('กรุณาระบุสัญลักษณ์หลักทรัพย์');
+      if (shares <= 0 || price <= 0) return alert('กรุณากรอกจำนวนหุ้นและราคาให้ถูกต้อง');
+
+      const btn = document.getElementById('btnSaveTrade');
+      btn.innerText = 'กำลังบันทึก...';
+      btn.disabled = true;
+
+      const payload = {
+        side: selectedSide,
+        ticker: ticker,
+        shares: shares,
+        price: price,
+        date: date,
+        group: group,
+        note: note
+      };
+
+      apiCall('addTrade', payload, (res) => {
+        btn.innerText = 'บันทึกข้อมูล';
+        btn.disabled = false;
+        if (res.ok) {
+          closeModal('modalTrade');
+          document.getElementById('tradeTicker').value = '';
+          document.getElementById('tradeShares').value = '';
+          document.getElementById('tradePrice').value = '';
+          document.getElementById('tradeNote').value = '';
+          loadDashboardData();
+        } else {
+          alert('เกิดข้อผิดพลาด: ' + res.error);
+        }
+      });
+    }
+
+    function submitCashflowForm() {
+      const amount = Number(document.getElementById('cashAmount').value);
+      const date   = document.getElementById('cashDate').value;
+      const cat    = document.getElementById('cashCategory').value;
+      const acc    = document.getElementById('cashAccount').value;
+      const note   = document.getElementById('cashNote').value.trim();
+
+      if (amount <= 0) return alert('กรุณากรอกจำนวนเงินให้ถูกต้อง');
+
+      const btn = document.getElementById('btnSaveCash');
+      btn.innerText = 'กำลังบันทึก...';
+      btn.disabled = true;
+
+      const payload = {
+        type: selectedCashType,
+        category: cat,
+        account: acc,
+        amountTHB: amount,
+        date: date,
+        note: note
+      };
+
+      apiCall('addCashflow', payload, (res) => {
+        btn.innerText = 'บันทึกเงินสด';
+        btn.disabled = false;
+        if (res.ok) {
+          closeModal('modalCashflow');
+          document.getElementById('cashAmount').value = '';
+          document.getElementById('cashNote').value = '';
+          loadDashboardData();
+        } else {
+          alert('เกิดข้อผิดพลาด: ' + res.error);
+        }
+      });
+    }
+
     function formatNum(n, dec = 2) {
       const num = Number(n) || 0;
       return num.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
@@ -656,28 +1014,19 @@
       currentLang = currentLang === 'th' ? 'en' : 'th';
       localStorage.setItem('portfolio_lang', currentLang);
       document.getElementById('btnLangLabel').innerText = I18N[currentLang].btnLang;
-      
       document.querySelectorAll('.lang-text').forEach(el => {
         el.innerText = el.getAttribute(`data-${currentLang}`);
       });
-      
       document.getElementById('lblPinTitle').innerText = I18N[currentLang].pinTitle;
       document.getElementById('lblPinDesc').innerText  = I18N[currentLang].pinDesc;
-
       if (appData) renderDashboard();
     }
 
-    /* -------------------------------------------------------------
-     * เริ่มต้นระบบเมื่อเปิดหน้าเว็บ
-     * ------------------------------------------------------------- */
     window.addEventListener('DOMContentLoaded', () => {
-      // ตั้งภาษา
       if (currentLang === 'en') {
         document.getElementById('btnLangLabel').innerText = 'TH';
-        toggleLang(); // switch to en
+        toggleLang();
       }
-
-      // ตรวจสอบ Token เดิม
       if (currentToken) {
         document.getElementById('pinOverlay').classList.add('hidden');
         loadDashboardData();
