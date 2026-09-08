@@ -11,41 +11,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Sarabun:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   
   <style>
-    body {
-      font-family: 'Sarabun', sans-serif;
-      background-color: #0d1117;
-      color: #c9d1d9;
-    }
-    .font-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-feature-settings: "tnum";
-    }
-    .font-brand {
-      font-family: 'Chakra Petch', sans-serif;
-    }
-    .card-dark {
-      background-color: #161b22;
-      border: 1px solid #30363d;
-    }
-    .card-hover:hover {
-      border-color: #58a6ff;
-    }
-    .pulse-dot {
-      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: .4; }
-    }
+    body { font-family: 'Sarabun', sans-serif; background-color: #0d1117; color: #c9d1d9; }
+    .font-num { font-family: 'JetBrains Mono', monospace; font-feature-settings: "tnum"; }
+    .font-brand { font-family: 'Chakra Petch', sans-serif; }
+    .card-dark { background-color: #161b22; border: 1px solid #30363d; }
+    .card-hover:hover { border-color: #58a6ff; }
+    .pulse-dot { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white pb-24">
 
-  <!-- ========================================== -->
-  <!-- 1. หน้าต่างกรอกรหัสผ่าน 6 หลัก (PIN LOCK) -->
-  <!-- ========================================== -->
+  <!-- 1. หน้าต่างกรอกรหัส PIN -->
   <div id="pinOverlay" class="fixed inset-0 z-50 bg-[#0d1117] flex flex-col items-center justify-center p-4">
     <div class="w-full max-w-xs text-center">
       <div class="w-16 h-16 bg-blue-600/10 border border-blue-500/30 rounded-2xl mx-auto flex items-center justify-center mb-4">
@@ -86,9 +65,7 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- 2. ส่วนหัวของหน้าเว็บ (HEADER BAR) -->
-  <!-- ========================================== -->
+  <!-- 2. ส่วนหัว Header -->
   <header class="border-b border-[#30363d] bg-[#161b22]/80 backdrop-blur sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -107,6 +84,9 @@
       </div>
 
       <div class="flex items-center gap-2">
+        <button onclick="triggerManualSnapshot()" class="px-2.5 py-1 text-xs rounded-lg border border-[#30363d] bg-[#21262d] text-emerald-400 hover:bg-[#30363d] font-semibold transition flex items-center gap-1" title="บันทึก Snapshot วันนี้">
+          <span>📸 Snapshot</span>
+        </button>
         <button onclick="toggleLang()" class="px-2.5 py-1 text-xs rounded-lg border border-[#30363d] bg-[#21262d] text-gray-300 hover:bg-[#30363d] font-semibold transition">
           <span id="btnLangLabel">EN</span>
         </button>
@@ -120,9 +100,7 @@
     </div>
   </header>
 
-  <!-- ========================================== -->
-  <!-- 3. แถบสลับหน้าจอ (NAVIGATION TABS) -->
-  <!-- ========================================== -->
+  <!-- 3. แท็บสลับหน้าจอ -->
   <div class="max-w-7xl mx-auto px-4 pt-4">
     <div class="flex items-center gap-2 border-b border-[#30363d] pb-2 text-xs font-semibold">
       <button onclick="switchView('dashboard')" id="navTabDashboard" class="px-4 py-2 rounded-xl bg-blue-600 text-white transition">
@@ -137,9 +115,7 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- 4. พื้นที่เนื้อหาหลัก (MAIN CONTENT) -->
-  <!-- ========================================== -->
+  <!-- 4. เนื้อหาหลัก -->
   <main class="max-w-7xl mx-auto px-4 pt-4 flex-1 w-full space-y-6">
 
     <div id="loadingBanner" class="hidden flex items-center justify-center gap-2 p-3 rounded-xl bg-blue-950/40 border border-blue-800/50 text-blue-300 text-xs font-medium">
@@ -150,7 +126,7 @@
     <!-- VIEW 1: DASHBOARD -->
     <div id="viewDashboard" class="space-y-6">
       
-      <!-- การ์ดตัวเลขสรุป 4 กล่อง -->
+      <!-- การ์ด 4 กล่อง -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <div class="card-dark rounded-2xl p-4 md:p-5 card-hover transition">
           <div class="text-[11px] md:text-xs font-medium text-gray-400 mb-1 flex items-center justify-between">
@@ -225,7 +201,20 @@
         </div>
       </div>
 
-      <!-- กราฟพอร์ต -->
+      <!-- กราฟการเติบโต Net Worth Trend (New in Phase 5) -->
+      <div class="card-dark rounded-2xl p-5">
+        <div class="flex items-center justify-between mb-2">
+          <div>
+            <h2 class="text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">แนวโน้มมูลค่าสุทธิพอร์ต (Net Worth Trend THB)</h2>
+            <p class="text-[11px] text-gray-500">บันทึกสถิติรายวันจากระบบ Snapshot</p>
+          </div>
+        </div>
+        <div class="relative h-56 w-full">
+          <canvas id="chartNetWorthTrend"></canvas>
+        </div>
+      </div>
+
+      <!-- กราฟพอร์ต 2 กล่อง -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div class="card-dark rounded-2xl p-5 flex flex-col justify-between">
           <div>
@@ -372,9 +361,7 @@
 
   </main>
 
-  <!-- ========================================== -->
-  <!-- 5. ปุ่มลอยสำหรับเปิดเมนูเพิ่มรายการ (FAB) -->
-  <!-- ========================================== -->
+  <!-- 5. ปุ่มลอย FAB -->
   <div class="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
     <div id="fabSubMenu" class="hidden flex flex-col items-end gap-2 transition-all duration-200">
       <button onclick="openModal('modalCashflow'); toggleFab();" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#21262d] border border-[#30363d] text-emerald-400 hover:bg-[#30363d] shadow-xl text-xs font-semibold">
@@ -392,9 +379,7 @@
     </button>
   </div>
 
-  <!-- ========================================== -->
-  <!-- 6. ฟอร์ม Modal บันทึกการลงทุน (Trade Form) -->
-  <!-- ========================================== -->
+  <!-- 6. Modal Trade -->
   <div id="modalTrade" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="card-dark rounded-2xl w-full max-w-lg border border-[#30363d] overflow-hidden max-h-[90vh] flex flex-col">
       <div class="p-4 border-b border-[#30363d] flex items-center justify-between">
@@ -477,9 +462,7 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- 7. ฟอร์ม Modal บันทึกกระแสเงินสด (Cashflow) -->
-  <!-- ========================================== -->
+  <!-- 7. Modal Cashflow -->
   <div id="modalCashflow" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="card-dark rounded-2xl w-full max-w-md border border-[#30363d] overflow-hidden flex flex-col">
       <div class="p-4 border-b border-[#30363d] flex items-center justify-between">
@@ -533,9 +516,7 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- 8. สคริปต์การทำงาน (JAVASCRIPT) -->
-  <!-- ========================================== -->
+  <!-- 8. JavaScript -->
   <script>
     const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbw_P74pybIzkQ0SSa0RuO8lFgjbgDh5KSerIoL9NcNR1IVAOJ0Jyz3Vb4-khVlsEfNN/exec';
 
@@ -545,6 +526,7 @@
     let appData      = null;
     let chartGroup   = null;
     let chartPnl     = null;
+    let chartTrend   = null;
 
     let selectedSide     = 'BUY';
     let selectedCashType = 'out';
@@ -558,27 +540,22 @@
     function apiCall(action, payload = {}, callback) {
       const cbName = 'jsonp_cb_' + Math.round(100000 * Math.random());
       const script = document.createElement('script');
-      
       window[cbName] = function(data) {
         delete window[cbName];
         document.body.removeChild(script);
         callback(data);
       };
-
       const pStr = encodeURIComponent(JSON.stringify(payload));
       const url  = `${BACKEND_URL}?callback=${cbName}&action=${action}&token=${encodeURIComponent(currentToken)}&payload=${pStr}&_t=${Date.now()}`;
-      
       script.src = url;
       script.onerror = function() {
         delete window[cbName];
         document.body.removeChild(script);
         callback({ ok: false, error: "ไม่สามารถติดต่อฐานข้อมูลได้ ตรวจสอบอินเทอร์เน็ต" });
       };
-
       document.body.appendChild(script);
     }
 
-    /* สลับหน้าจอ View */
     function switchView(viewName) {
       currentView = viewName;
       ['dashboard', 'trades', 'cashflow'].forEach(v => {
@@ -592,12 +569,10 @@
           tabEl.className = "px-4 py-2 rounded-xl bg-[#161b22] text-gray-400 hover:text-white border border-[#30363d] transition";
         }
       });
-
       if (viewName === 'trades') filterTradesTable();
       if (viewName === 'cashflow') filterCashflowTable();
     }
 
-    /* PIN Lock */
     function pressPin(n) {
       if (enteredPin.length < 6) {
         enteredPin += n;
@@ -702,9 +677,79 @@
       }
 
       renderPendingOrders();
+      renderNetWorthTrendChart();
       renderPositionsTable();
       renderGroupChart();
       renderAssetPnlChart();
+    }
+
+    function renderNetWorthTrendChart() {
+      const ctx = document.getElementById('chartNetWorthTrend').getContext('2d');
+      const snaps = (appData.snapshot || []).slice();
+
+      // ถ้าไม่มี Snapshot ให้สร้างจากยอดปัจจุบัน 1 จุด
+      let labels = snaps.map(s => s.date);
+      let data   = snaps.map(s => s.netWorthTHB);
+
+      if (!labels.length && appData.summary) {
+        labels = ['วันนี้'];
+        data   = [appData.summary.netWorthTHB];
+      }
+
+      if (chartTrend) chartTrend.destroy();
+
+      chartTrend = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Net Worth (THB)',
+            data: data,
+            borderColor: '#58a6ff',
+            backgroundColor: 'rgba(88, 166, 255, 0.1)',
+            fill: true,
+            tension: 0.3,
+            borderWidth: 2,
+            pointBackgroundColor: '#58a6ff',
+            pointRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (c) => ` ฿${formatNum(c.raw, 2)}`
+              }
+            }
+          },
+          scales: {
+            x: { grid: { color: '#21262d' }, ticks: { color: '#8b949e', font: { family: 'JetBrains Mono' } } },
+            y: {
+              grid: { color: '#21262d' },
+              ticks: {
+                color: '#8b949e',
+                font: { family: 'JetBrains Mono' },
+                callback: (v) => '฿' + formatNum(v, 0)
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function triggerManualSnapshot() {
+      if (!confirm('ต้องการบันทึกภาพรวม Snapshot สำหรับวันนี้ทันทีใช่หรือไม่?')) return;
+      apiCall('saveSnapshot', {}, (res) => {
+        if (res.ok) {
+          alert('บันทึก Snapshot เรียบร้อยแล้ว');
+          loadDashboardData();
+        } else {
+          alert('ผิดพลาด: ' + res.error);
+        }
+      });
     }
 
     function renderPendingOrders() {
@@ -935,9 +980,6 @@
       });
     }
 
-    /* -------------------------------------------------------------
-     * ตารางประวัติ Trades & Cashflow (พร้อม Filter)
-     * ------------------------------------------------------------- */
     function filterTradesTable() {
       if (!appData) return;
       const tBody = document.getElementById('tradesHistoryTableBody');
@@ -1035,9 +1077,6 @@
       cBody.innerHTML = html;
     }
 
-    /* -------------------------------------------------------------
-     * ส่งออกไฟล์ CSV
-     * ------------------------------------------------------------- */
     function exportTradesCSV() {
       if (!appData || !appData.trades || !appData.trades.length) return alert('ไม่มีข้อมูลสำหรับส่งออก');
       const headers = ['id','date','group','side','ticker','shares','price','commission','vat','secFee','tafFee','totalFee','netUSD','fxRate','netTHB','note'];
@@ -1072,7 +1111,6 @@
       URL.revokeObjectURL(url);
     }
 
-    /* Form & Utility */
     function toggleFab() {
       const menu = document.getElementById('fabSubMenu');
       const icon = document.getElementById('fabIcon');
@@ -1099,10 +1137,8 @@
       if (!appData) return;
       const grpSel = document.getElementById('tradeGroup');
       grpSel.innerHTML = (appData.groups || []).map(g => `<option value="${g.nameTh}">${g.nameTh}</option>`).join('');
-
       const catSel = document.getElementById('cashCategory');
       catSel.innerHTML = (appData.categories || []).map(c => `<option value="${c.nameTh}">${c.nameTh}</option>`).join('');
-
       const accSel = document.getElementById('cashAccount');
       accSel.innerHTML = (appData.accounts || []).map(a => `<option value="${a.name}">${a.name} (${a.currency})</option>`).join('');
     }
@@ -1182,13 +1218,8 @@
       btn.disabled = true;
 
       const payload = {
-        side: selectedSide,
-        ticker: ticker,
-        shares: shares,
-        price: price,
-        date: date,
-        group: group,
-        note: note
+        side: selectedSide, ticker: ticker, shares: shares,
+        price: price, date: date, group: group, note: note
       };
 
       apiCall('addTrade', payload, (res) => {
@@ -1221,12 +1252,8 @@
       btn.disabled = true;
 
       const payload = {
-        type: selectedCashType,
-        category: cat,
-        account: acc,
-        amountTHB: amount,
-        date: date,
-        note: note
+        type: selectedCashType, category: cat, account: acc,
+        amountTHB: amount, date: date, note: note
       };
 
       apiCall('addCashflow', payload, (res) => {
