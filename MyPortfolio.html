@@ -1,31 +1,20 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
   <title>ระบบบริหารพอร์ตการลงทุน & MT5 Forex</title>
-
   
-
-  <!-- ไอคอน App สำหรับมือถือทั้ง iOS และ Android -->
-
   <link rel="apple-touch-icon" href="profile.png">
-
   <link rel="icon" type="image/png" href="profile.png">
-
   <link rel="shortcut icon" href="profile.png">
-
   <link rel="manifest" href="manifest.json">
-
   <meta name="theme-color" content="#161b22">
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Sarabun:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   
   <style>
@@ -83,7 +72,7 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- 2. ส่วนหัว Header พร้อมรูป Profile -->
+  <!-- 2. ส่วนหัว Header -->
   <!-- ========================================== -->
   <header class="border-b border-[#30363d] bg-[#161b22]/80 backdrop-blur sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
@@ -137,7 +126,7 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- 4. เนื้อหาหลัก (MAIN CONTENT) -->
+  <!-- 4. เนื้อหาหลัก -->
   <!-- ========================================== -->
   <main class="max-w-7xl mx-auto px-4 pt-4 flex-1 w-full space-y-6">
 
@@ -146,10 +135,10 @@
       <span>กำลังประสานข้อมูลกับฐานข้อมูล...</span>
     </div>
 
-    <!-- VIEW 1: DASHBOARD (แบ่ง 3 Groups + 6 รายการชัดเจน) -->
+    <!-- VIEW 1: DASHBOARD -->
     <div id="viewDashboard" class="space-y-6">
 
-      <!-- กล่องโปรไฟล์ & สรุปรวมสุทธิทั้งหมด (Item 6: Grand Total) -->
+      <!-- กล่องสรุปรวมสุทธิ (Item 6: Grand Total) -->
       <div class="card-dark rounded-2xl p-5 border border-blue-500/30 bg-gradient-to-r from-blue-950/30 via-[#161b22] to-[#161b22] flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="flex items-center gap-4 w-full md:w-auto">
           <div class="w-16 h-16 rounded-2xl overflow-hidden border-2 border-blue-400 shadow-xl flex-shrink-0">
@@ -162,7 +151,7 @@
           </div>
         </div>
         <div class="flex items-center gap-3 w-full md:w-auto justify-end">
-          <button onclick="openModal('modalForex')" class="px-3 py-2 rounded-xl bg-indigo-600/20 border border-indigo-500/40 text-indigo-300 hover:bg-indigo-600 hover:text-white text-xs font-semibold transition">
+          <button onclick="openForexModal()" class="px-3 py-2 rounded-xl bg-indigo-600/20 border border-indigo-500/40 text-indigo-300 hover:bg-indigo-600 hover:text-white text-xs font-semibold transition">
             + บันทึก FOREX
           </button>
           <button onclick="openModal('modalAccount')" class="px-3 py-2 rounded-xl bg-[#21262d] border border-[#30363d] text-gray-300 hover:text-white text-xs font-semibold transition">
@@ -171,9 +160,7 @@
         </div>
       </div>
 
-      <!-- ═══════════════════════════════════════ -->
       <!-- GROUP 1: สภาพคล่องและเงินฝาก THB (Items 1, 2, 3) -->
-      <!-- ═══════════════════════════════════════ -->
       <div>
         <div class="flex items-center justify-between mb-2">
           <h2 class="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
@@ -201,9 +188,7 @@
         </div>
       </div>
 
-      <!-- ═══════════════════════════════════════ -->
       <!-- GROUP 2: พอร์ตลงทุนสหรัฐ ETF/STOCK (Item 4) -->
-      <!-- ═══════════════════════════════════════ -->
       <div>
         <div class="flex items-center justify-between mb-2">
           <h2 class="text-xs font-bold text-blue-400 uppercase tracking-wider flex items-center gap-1.5">
@@ -229,9 +214,7 @@
         </div>
       </div>
 
-      <!-- ═══════════════════════════════════════ -->
       <!-- GROUP 3: พอร์ตเงินตราต่างประเทศ FOREX (Item 5) -->
-      <!-- ═══════════════════════════════════════ -->
       <div>
         <div class="flex items-center justify-between mb-2">
           <h2 class="text-xs font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
@@ -256,32 +239,44 @@
           </div>
         </div>
 
-        <!-- การ์ดย่อยแยก 4 Terminals -->
+        <!-- การ์ดย่อย 4 Terminals พร้อมวันที่เริ่มเทรด (Since / sinc) -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 font-num">
           <div class="card-dark rounded-xl p-3 border-l-4 border-l-blue-500">
-            <div class="text-[11px] text-gray-400 font-sans font-semibold">Terminal-01</div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] text-gray-300 font-sans font-semibold">Terminal-01</span>
+              <span id="valT1Sinc" class="text-[9px] px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-300 font-sans">sinc: -</span>
+            </div>
             <div class="text-sm font-bold text-white mt-1" id="valT1Equity">$0.00</div>
             <div class="text-[10px] mt-0.5" id="valT1Pnl">$0.00</div>
           </div>
           <div class="card-dark rounded-xl p-3 border-l-4 border-l-purple-500">
-            <div class="text-[11px] text-gray-400 font-sans font-semibold">Terminal-02</div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] text-gray-300 font-sans font-semibold">Terminal-02</span>
+              <span id="valT2Sinc" class="text-[9px] px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-300 font-sans">sinc: -</span>
+            </div>
             <div class="text-sm font-bold text-white mt-1" id="valT2Equity">$0.00</div>
             <div class="text-[10px] mt-0.5" id="valT2Pnl">$0.00</div>
           </div>
           <div class="card-dark rounded-xl p-3 border-l-4 border-l-amber-500">
-            <div class="text-[11px] text-gray-400 font-sans font-semibold">Terminal-03</div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] text-gray-300 font-sans font-semibold">Terminal-03</span>
+              <span id="valT3Sinc" class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 font-sans">sinc: -</span>
+            </div>
             <div class="text-sm font-bold text-white mt-1" id="valT3Equity">$0.00</div>
             <div class="text-[10px] mt-0.5" id="valT3Pnl">$0.00</div>
           </div>
           <div class="card-dark rounded-xl p-3 border-l-4 border-l-emerald-500">
-            <div class="text-[11px] text-gray-400 font-sans font-semibold">Terminal-04</div>
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] text-gray-300 font-sans font-semibold">Terminal-04</span>
+              <span id="valT4Sinc" class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-300 font-sans">sinc: -</span>
+            </div>
             <div class="text-sm font-bold text-white mt-1" id="valT4Equity">$0.00</div>
             <div class="text-[10px] mt-0.5" id="valT4Pnl">$0.00</div>
           </div>
         </div>
       </div>
 
-      <!-- กราฟการเติบโต FOREX 4 Terminals Growth (Multi-Line Chart) -->
+      <!-- กราฟการเติบโต MT5 FOREX 4 Terminals -->
       <div class="card-dark rounded-2xl p-5">
         <div class="flex items-center justify-between mb-3">
           <div>
@@ -309,14 +304,14 @@
 
     </div>
 
-    <!-- VIEW 2: FOREX HISTORY & LOGS -->
+    <!-- VIEW 2: FOREX HISTORY -->
     <div id="viewForex" class="hidden space-y-4">
       <div class="card-dark rounded-2xl p-4 flex justify-between items-center">
         <div>
           <h2 class="text-sm font-bold text-white font-brand">ประวัติการบันทึกสถานะ MT5 Forex</h2>
-          <p class="text-xs text-gray-400">บันทึกสถิติ Equity, Balance และกำไร/ขาดทุน</p>
+          <p class="text-xs text-gray-400">บันทึกสถิติ Equity, Balance, sinc และกำไร/ขาดทุน</p>
         </div>
-        <button onclick="openModal('modalForex')" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold">
+        <button onclick="openForexModal()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold">
           + บันทึกสถานะ MT5 ใหม่
         </button>
       </div>
@@ -328,6 +323,7 @@
               <tr>
                 <th class="py-3 px-4">วันที่</th>
                 <th class="py-3 px-3">Terminal</th>
+                <th class="py-3 px-3">วันที่เริ่มเทรด (sinc)</th>
                 <th class="py-3 px-3 text-right">Balance ($)</th>
                 <th class="py-3 px-3 text-right">Equity ($)</th>
                 <th class="py-3 px-3 text-right">Profit/Loss ($)</th>
@@ -382,8 +378,11 @@
     <!-- VIEW 4: CASHFLOW HISTORY -->
     <div id="viewCashflow" class="hidden space-y-4">
       <div class="card-dark rounded-2xl p-4 flex justify-between items-center">
-        <h2 class="text-sm font-bold text-white font-brand">ประวัติกระแสเงินสด</h2>
-        <button onclick="exportCashflowCSV()" class="px-4 py-2 rounded-xl bg-[#21262d] border border-[#30363d] text-white text-xs font-semibold">
+        <div>
+          <h2 class="text-sm font-bold text-white font-brand">ประวัติกระแสเงินสด (Cashflow)</h2>
+          <p class="text-xs text-gray-400">รายการเงินเข้า-ออกและโอนย้ายสภาพคล่อง</p>
+        </div>
+        <button onclick="exportCashflowCSV()" class="px-4 py-2 rounded-xl bg-[#21262d] border border-[#30363d] hover:bg-[#30363d] text-white text-xs font-semibold">
           ส่งออก CSV (CASHFLOW)
         </button>
       </div>
@@ -414,13 +413,13 @@
   <!-- ========================================== -->
   <div class="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
     <div id="fabSubMenu" class="hidden flex flex-col items-end gap-2">
-      <button onclick="openModal('modalForex'); toggleFab();" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-indigo-600 text-white shadow-xl text-xs font-semibold">
+      <button onclick="openForexModal(); toggleFab();" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-indigo-600 text-white shadow-xl text-xs font-semibold">
         <span>💱 บันทึก MT5 FOREX</span>
       </button>
-      <button onclick="openModal('modalTrade'); toggleFab();" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-blue-600 text-white shadow-xl text-xs font-semibold">
+      <button onclick="openTradeModal(); toggleFab();" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-blue-600 text-white shadow-xl text-xs font-semibold">
         <span>📈 บันทึกการลงทุนสหรัฐ (Trade)</span>
       </button>
-      <button onclick="openModal('modalCashflow'); toggleFab();" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-emerald-600 text-white shadow-xl text-xs font-semibold">
+      <button onclick="openCashflowModal(); toggleFab();" class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-emerald-600 text-white shadow-xl text-xs font-semibold">
         <span>💵 บันทึกกระแสเงินสด (Cashflow)</span>
       </button>
     </div>
@@ -431,7 +430,7 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- 6. MODAL ฟอร์ม MT5 FOREX (4 Terminals) -->
+  <!-- 6. MODAL ฟอร์ม MT5 FOREX (เพิ่มช่อง sinc) -->
   <!-- ========================================== -->
   <div id="modalForex" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="card-dark rounded-2xl w-full max-w-md border border-[#30363d] overflow-hidden flex flex-col">
@@ -440,14 +439,20 @@
         <button onclick="closeModal('modalForex')" class="text-gray-400 hover:text-white">&times;</button>
       </div>
       <div class="p-5 space-y-4 text-xs">
-        <div>
-          <label class="block text-gray-400 mb-1">เลือก Terminal</label>
-          <select id="fxTerminal" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-semibold focus:border-blue-500 focus:outline-none">
-            <option value="Terminal-01">Terminal-01</option>
-            <option value="Terminal-02">Terminal-02</option>
-            <option value="Terminal-03">Terminal-03</option>
-            <option value="Terminal-04">Terminal-04</option>
-          </select>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-gray-400 mb-1">เลือก Terminal</label>
+            <select id="fxTerminal" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-semibold focus:border-blue-500 focus:outline-none">
+              <option value="Terminal-01">Terminal-01</option>
+              <option value="Terminal-02">Terminal-02</option>
+              <option value="Terminal-03">Terminal-03</option>
+              <option value="Terminal-04">Terminal-04</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">วันที่เริ่มเทรด (sinc)</label>
+            <input type="date" id="fxSinc" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num focus:border-blue-500 focus:outline-none">
+          </div>
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
@@ -456,7 +461,7 @@
           </div>
           <div>
             <label class="block text-gray-400 mb-1">Balance ($ USD)</label>
-            <input type="number" step="any" id="fxBalance" placeholder="0.00" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num font-bold focus:border-blue-500 focus:outline-none">
+            <input type="number" step="any" id="fxBalance" placeholder="0.00" oninput="calcForexPnl()" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num font-bold focus:border-blue-500 focus:outline-none">
           </div>
         </div>
         <div class="grid grid-cols-2 gap-3">
@@ -471,7 +476,7 @@
         </div>
         <div>
           <label class="block text-gray-400 mb-1">บันทึกช่วยจำ (Note)</label>
-          <input type="text" id="fxNote" placeholder="เช่น สรุปผลสิ้นวัน" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white focus:border-blue-500 focus:outline-none">
+          <input type="text" id="fxNote" placeholder="เช่น สรุปผลรายวัน" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white focus:border-blue-500 focus:outline-none">
         </div>
       </div>
       <div class="p-4 border-t border-[#30363d] flex justify-end gap-2 bg-[#161b22]">
@@ -484,8 +489,114 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- 7. MODAL ฟอร์มจัดการ ACCOUNTS (Item 1, 2, 3) -->
+  <!-- 7. MODAL ฟอร์ม กระแสเงินสด (แก้คลิกสลับปุ่มได้ 100%) -->
   <!-- ========================================== -->
+  <div id="modalCashflow" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="card-dark rounded-2xl w-full max-w-md border border-[#30363d] overflow-hidden flex flex-col">
+      <div class="p-4 border-b border-[#30363d] flex items-center justify-between">
+        <h3 class="text-sm font-bold text-white font-brand">บันทึกกระแสเงินสด (Cashflow)</h3>
+        <button onclick="closeModal('modalCashflow')" class="text-gray-400 hover:text-white">&times;</button>
+      </div>
+      <div class="p-5 space-y-4 text-xs">
+        <div>
+          <label class="block text-gray-400 mb-1.5 font-medium">ทิศทางเงิน</label>
+          <div class="grid grid-cols-2 gap-2 font-semibold">
+            <button type="button" onclick="setCashType('out')" id="btnCashOut" class="py-2.5 rounded-xl border border-rose-500 bg-rose-500/20 text-rose-300 font-bold transition">โอนออก / จ่ายออก</button>
+            <button type="button" onclick="setCashType('in')" id="btnCashIn" class="py-2.5 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400 transition">รับเข้า / โอนเข้าลงทุน</button>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-gray-400 mb-1">วันที่</label>
+            <input type="date" id="cashDate" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num focus:border-blue-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">หมวดหมู่</label>
+            <select id="cashCategory" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white focus:border-blue-500 focus:outline-none"></select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-gray-400 mb-1">บัญชีที่ใช้</label>
+            <select id="cashAccount" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white focus:border-blue-500 focus:outline-none"></select>
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">จำนวนเงิน (บาท)</label>
+            <input type="number" step="any" id="cashAmount" placeholder="0.00" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num font-bold focus:border-blue-500 focus:outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="block text-gray-400 mb-1">บันทึกช่วยจำ (Note)</label>
+          <input type="text" id="cashNote" placeholder="รายละเอียดเพิ่มเติม" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white focus:border-blue-500 focus:outline-none">
+        </div>
+      </div>
+      <div class="p-4 border-t border-[#30363d] flex justify-end gap-2 bg-[#161b22]">
+        <button onclick="closeModal('modalCashflow')" class="px-4 py-2 rounded-xl text-gray-400 hover:text-white">ยกเลิก</button>
+        <button onclick="submitCashflowForm()" id="btnSaveCash" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold">
+          บันทึกเงินสด
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 8. MODAL ฟอร์ม ลงทุนสหรัฐ (แก้คลิกสลับปุ่มได้ 100%) -->
+  <!-- ========================================== -->
+  <div id="modalTrade" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="card-dark rounded-2xl w-full max-w-lg border border-[#30363d] overflow-hidden flex flex-col">
+      <div class="p-4 border-b border-[#30363d] flex items-center justify-between">
+        <h3 class="text-sm font-bold text-white font-brand">บันทึกรายการลงทุนสหรัฐ (Trade / Order)</h3>
+        <button onclick="closeModal('modalTrade')" class="text-gray-400 hover:text-white">&times;</button>
+      </div>
+      <div class="p-5 space-y-4 text-xs">
+        <div>
+          <label class="block text-gray-400 mb-1.5 font-medium">ประเภทคำสั่ง (Order Side)</label>
+          <div class="grid grid-cols-4 gap-2 font-num font-semibold text-center">
+            <button type="button" onclick="setSide('BUY')" id="btnSideBUY" class="py-2.5 rounded-xl border border-emerald-500 bg-emerald-500/20 text-emerald-300 font-bold transition">BUY</button>
+            <button type="button" onclick="setSide('W-BUY')" id="btnSideWBUY" class="py-2.5 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400 transition">W-BUY</button>
+            <button type="button" onclick="setSide('SELL')" id="btnSideSELL" class="py-2.5 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400 transition">SELL</button>
+            <button type="button" onclick="setSide('W-SELL')" id="btnSideWSELL" class="py-2.5 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400 transition">W-SELL</button>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-gray-400 mb-1">วันที่</label>
+            <input type="date" id="tradeDate" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num focus:border-blue-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">กลุ่มการลงทุน</label>
+            <select id="tradeGroup" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white focus:border-blue-500 focus:outline-none"></select>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-gray-400 mb-1">Ticker</label>
+            <input type="text" id="tradeTicker" placeholder="เช่น TSLA" oninput="this.value = this.value.toUpperCase();" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num uppercase focus:border-blue-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">จำนวนหุ้น</label>
+            <input type="number" step="any" id="tradeShares" placeholder="0.00" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num focus:border-blue-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">ราคาต่อหุ้น ($)</label>
+            <input type="number" step="any" id="tradePrice" placeholder="0.00" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num focus:border-blue-500 focus:outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="block text-gray-400 mb-1">บันทึกช่วยจำ (Note)</label>
+          <input type="text" id="tradeNote" placeholder="รายละเอียดเพิ่มเติม" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white focus:border-blue-500 focus:outline-none">
+        </div>
+      </div>
+      <div class="p-4 border-t border-[#30363d] flex justify-end gap-2 bg-[#161b22]">
+        <button onclick="closeModal('modalTrade')" class="px-4 py-2 rounded-xl text-gray-400 hover:text-white">ยกเลิก</button>
+        <button onclick="submitTradeForm()" id="btnSaveTrade" class="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold">
+          บันทึกข้อมูล
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL ACCOUNTS -->
   <div id="modalAccount" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="card-dark rounded-2xl w-full max-w-md border border-[#30363d] overflow-hidden flex flex-col">
       <div class="p-4 border-b border-[#30363d] flex items-center justify-between">
@@ -511,55 +622,8 @@
     </div>
   </div>
 
-  <!-- MODAL TRADE & CASHFLOW (คงเดิม) -->
-  <div id="modalTrade" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="card-dark rounded-2xl w-full max-w-lg border border-[#30363d] overflow-hidden flex flex-col">
-      <div class="p-4 border-b border-[#30363d] flex items-center justify-between">
-        <h3 class="text-sm font-bold text-white font-brand">บันทึกรายการลงทุนสหรัฐ</h3>
-        <button onclick="closeModal('modalTrade')" class="text-gray-400 hover:text-white">&times;</button>
-      </div>
-      <div class="p-5 space-y-3 text-xs">
-        <div class="grid grid-cols-4 gap-2 font-num font-semibold text-center">
-          <button type="button" onclick="setSide('BUY')" id="btnSideBUY" class="py-2 rounded-xl border border-emerald-500 bg-emerald-500/20 text-emerald-300">BUY</button>
-          <button type="button" onclick="setSide('W-BUY')" id="btnSideWBUY" class="py-2 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400">W-BUY</button>
-          <button type="button" onclick="setSide('SELL')" id="btnSideSELL" class="py-2 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400">SELL</button>
-          <button type="button" onclick="setSide('W-SELL')" id="btnSideWSELL" class="py-2 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400">W-SELL</button>
-        </div>
-        <div class="grid grid-cols-3 gap-2">
-          <input type="text" id="tradeTicker" placeholder="Ticker เช่น TSLA" class="bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white uppercase font-num">
-          <input type="number" step="any" id="tradeShares" placeholder="Shares" class="bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num">
-          <input type="number" step="any" id="tradePrice" placeholder="Price ($)" class="bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num">
-        </div>
-      </div>
-      <div class="p-4 border-t border-[#30363d] flex justify-end gap-2">
-        <button onclick="closeModal('modalTrade')" class="px-4 py-2 text-gray-400">ยกเลิก</button>
-        <button onclick="submitTradeForm()" class="px-5 py-2 rounded-xl bg-blue-600 text-white font-semibold">บันทึก</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="modalCashflow" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="card-dark rounded-2xl w-full max-w-md border border-[#30363d] overflow-hidden flex flex-col">
-      <div class="p-4 border-b border-[#30363d] flex items-center justify-between">
-        <h3 class="text-sm font-bold text-white font-brand">บันทึกกระแสเงินสด</h3>
-        <button onclick="closeModal('modalCashflow')" class="text-gray-400 hover:text-white">&times;</button>
-      </div>
-      <div class="p-5 space-y-3 text-xs">
-        <div class="grid grid-cols-2 gap-2">
-          <button type="button" onclick="setCashType('out')" id="btnCashOut" class="py-2 rounded-xl border border-rose-500 bg-rose-500/20 text-rose-300 font-bold">จ่ายออก</button>
-          <button type="button" onclick="setCashType('in')" id="btnCashIn" class="py-2 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400 font-bold">รับเข้า</button>
-        </div>
-        <input type="number" step="any" id="cashAmount" placeholder="จำนวนเงิน (บาท)" class="w-full bg-[#0d1117] border border-[#30363d] rounded-xl px-3 py-2 text-white font-num font-bold">
-      </div>
-      <div class="p-4 border-t border-[#30363d] flex justify-end gap-2">
-        <button onclick="closeModal('modalCashflow')" class="px-4 py-2 text-gray-400">ยกเลิก</button>
-        <button onclick="submitCashflowForm()" class="px-5 py-2 rounded-xl bg-emerald-600 text-white font-semibold">บันทึก</button>
-      </div>
-    </div>
-  </div>
-
   <!-- ========================================== -->
-  <!-- 8. JavaScript Logic ครบถ้วน -->
+  <!-- 9. JavaScript Engine -->
   <!-- ========================================== -->
   <script>
     const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbw_P74pybIzkQ0SSa0RuO8lFgjbgDh5KSerIoL9NcNR1IVAOJ0Jyz3Vb4-khVlsEfNN/exec';
@@ -598,12 +662,14 @@
       ['dashboard', 'forex', 'trades', 'cashflow'].forEach(v => {
         const viewEl = document.getElementById('view' + v.charAt(0).toUpperCase() + v.slice(1));
         const tabEl  = document.getElementById('navTab' + v.charAt(0).toUpperCase() + v.slice(1));
-        if (v === viewName) {
-          viewEl.classList.remove('hidden');
-          tabEl.className = "px-4 py-2 rounded-xl bg-blue-600 text-white transition";
-        } else {
-          viewEl.classList.add('hidden');
-          tabEl.className = "px-4 py-2 rounded-xl bg-[#161b22] text-gray-400 hover:text-white border border-[#30363d] transition";
+        if (viewEl && tabEl) {
+          if (v === viewName) {
+            viewEl.classList.remove('hidden');
+            tabEl.className = "px-4 py-2 rounded-xl bg-blue-600 text-white transition";
+          } else {
+            viewEl.classList.add('hidden');
+            tabEl.className = "px-4 py-2 rounded-xl bg-[#161b22] text-gray-400 hover:text-white border border-[#30363d] transition";
+          }
         }
       });
       if (viewName === 'forex') renderForexTable();
@@ -667,6 +733,10 @@
         appData = res.data;
         renderDashboard();
         populateAccountSelect();
+        populateDropdowns();
+        if (currentView === 'forex') renderForexTable();
+        if (currentView === 'trades') filterTradesTable();
+        if (currentView === 'cashflow') filterCashflowTable();
       });
     }
 
@@ -701,7 +771,7 @@
       usBadge.innerText = (sum.usPnlPct >= 0 ? '+' : '') + formatNum(sum.usPnlPct, 2) + '%';
       usBadge.className = `text-[10px] font-bold px-1.5 py-0.5 rounded font-num ${sum.usPnlPct >= 0 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'}`;
 
-      // Group 3 (Forex)
+      // Group 3
       document.getElementById('valItem5EquityTHB').innerText = formatNum(sum.forexEquityTHB) + ' ฿';
       document.getElementById('valItem5EquityUSD').innerText = formatNum(sum.forexEquityUSD);
       
@@ -715,15 +785,18 @@
       fxBadge.innerText = (sum.forexPnlPct >= 0 ? '+' : '') + formatNum(sum.forexPnlPct, 2) + '%';
       fxBadge.className = `text-[10px] font-bold px-1.5 py-0.5 rounded font-num ${sum.forexPnlPct >= 0 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'}`;
 
-      // 4 Terminals
+      // 4 Terminals (พร้อมแสดง sinc)
       const terms = sum.terminals || {};
       ['Terminal-01','Terminal-02','Terminal-03','Terminal-04'].forEach((tName, i) => {
-        const t = terms[tName] || { equity: 0, pnl: 0 };
+        const t = terms[tName] || { equity: 0, pnl: 0, sinc: '-' };
         const idx = i + 1;
         document.getElementById(`valT${idx}Equity`).innerText = '$' + formatNum(t.equity);
         const pnlEl = document.getElementById(`valT${idx}Pnl`);
         pnlEl.innerText = (t.pnl >= 0 ? '+' : '') + '$' + formatNum(t.pnl);
         pnlEl.className = `text-[10px] mt-0.5 ${t.pnl >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+        
+        const sincEl = document.getElementById(`valT${idx}Sinc`);
+        if (sincEl) sincEl.innerText = 'sinc: ' + (t.sinc || '-');
       });
 
       renderForexGrowthChart();
@@ -733,8 +806,6 @@
     function renderForexGrowthChart() {
       const ctx = document.getElementById('chartForexGrowth').getContext('2d');
       const fxLogs = appData.forex || [];
-
-      // จัดกลุ่มตามวันที่
       const datesSet = [...new Set(fxLogs.map(l => l.date))].sort();
       const t1 = [], t2 = [], t3 = [], t4 = [];
 
@@ -808,7 +879,7 @@
       const tbody = document.getElementById('forexTableBody');
       const list  = (appData.forex || []).slice().reverse();
       if (!list.length) {
-        tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-gray-500 font-sans">ยังไม่มีข้อมูลบันทึก MT5</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-gray-500 font-sans">ยังไม่มีข้อมูลบันทึก MT5</td></tr>`;
         return;
       }
       let html = '';
@@ -818,6 +889,7 @@
           <tr class="hover:bg-[#1c2128]">
             <td class="py-2.5 px-4 text-gray-400">${item.date}</td>
             <td class="py-2.5 px-3 font-bold text-indigo-400">${item.terminal}</td>
+            <td class="py-2.5 px-3 text-gray-300 font-sans">${item.sinc || '-'}</td>
             <td class="py-2.5 px-3 text-right">$${formatNum(item.balanceUSD)}</td>
             <td class="py-2.5 px-3 text-right font-bold text-white">$${formatNum(item.equityUSD)}</td>
             <td class="py-2.5 px-3 text-right font-semibold ${pnl >= 0 ? 'text-emerald-400' : 'text-rose-400'}">
@@ -833,6 +905,134 @@
       tbody.innerHTML = html;
     }
 
+    function filterTradesTable() {
+      if (!appData) return;
+      const tBody = document.getElementById('tradesHistoryTableBody');
+      const tickerQuery = (document.getElementById('filterTradeTicker').value || '').toUpperCase().trim();
+      const sideQuery   = document.getElementById('filterTradeSide').value;
+
+      let list = (appData.trades || []).slice().reverse();
+      if (tickerQuery) list = list.filter(t => (t.ticker || '').toUpperCase().includes(tickerQuery));
+      if (sideQuery)   list = list.filter(t => (t.side || '').toUpperCase() === sideQuery);
+
+      if (!list.length) {
+        tBody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-gray-500 font-sans">ไม่พบรายการธุรกรรม</td></tr>`;
+        return;
+      }
+
+      let html = '';
+      list.forEach(t => {
+        html += `
+          <tr class="hover:bg-[#1c2128]">
+            <td class="py-3 px-4 text-gray-300">${t.date}</td>
+            <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[10px] border border-blue-500/30 text-blue-300 font-sans">${t.side}</span></td>
+            <td class="py-3 px-3 font-bold text-white">${t.ticker}</td>
+            <td class="py-3 px-3 text-right text-gray-200">${formatNum(t.shares, 4)}</td>
+            <td class="py-3 px-3 text-right text-gray-300">$${formatNum(t.price, 2)}</td>
+            <td class="py-3 px-3 text-right font-semibold text-white">$${formatNum(t.netUSD, 2)}</td>
+            <td class="py-3 px-3 text-right text-gray-300">${formatNum(t.netTHB, 2)} ฿</td>
+            <td class="py-3 px-4 text-center">
+              <button onclick="deleteTradeItem('${t.id}')" class="text-rose-400 hover:text-white">ลบ</button>
+            </td>
+          </tr>
+        `;
+      });
+      tBody.innerHTML = html;
+    }
+
+    function filterCashflowTable() {
+      if (!appData) return;
+      const cBody = document.getElementById('cashHistoryTableBody');
+      let list = (appData.cashflow || []).slice().reverse();
+
+      if (!list.length) {
+        cBody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-gray-500 font-sans">ไม่พบรายการกระแสเงินสด</td></tr>`;
+        return;
+      }
+
+      let html = '';
+      list.forEach(c => {
+        const isIn = String(c.type).toLowerCase() === 'in';
+        html += `
+          <tr class="hover:bg-[#1c2128]">
+            <td class="py-3 px-4 text-gray-300">${c.date}</td>
+            <td class="py-3 px-3">
+              <span class="px-2 py-0.5 rounded text-[10px] ${isIn ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'} font-sans">
+                ${isIn ? 'รับเข้า' : 'จ่ายออก'}
+              </span>
+            </td>
+            <td class="py-3 px-3 text-gray-300">${c.category || '-'}</td>
+            <td class="py-3 px-3 text-gray-400">${c.account || '-'}</td>
+            <td class="py-3 px-3 text-right font-bold ${isIn ? 'text-emerald-400' : 'text-rose-400'}">
+              ${isIn ? '+' : '-'}${formatNum(c.amountTHB, 2)} ฿
+            </td>
+            <td class="py-3 px-4 text-gray-400 font-sans">${c.note || '-'}</td>
+            <td class="py-3 px-4 text-center">
+              <button onclick="deleteCashflowItem('${c.id}')" class="text-rose-400 hover:text-white">ลบ</button>
+            </td>
+          </tr>
+        `;
+      });
+      cBody.innerHTML = html;
+    }
+
+    /* สลับปุ่มประเภทในฟอร์ม Modal */
+    function setSide(side) {
+      selectedSide = side;
+      ['BUY','W-BUY','SELL','W-SELL'].forEach(s => {
+        const btn = document.getElementById('btnSide' + s.replace('-',''));
+        if (s === side) {
+          if (s.includes('BUY')) btn.className = "py-2.5 rounded-xl border border-emerald-500 bg-emerald-500/20 text-emerald-300 font-bold transition";
+          else btn.className = "py-2.5 rounded-xl border border-rose-500 bg-rose-500/20 text-rose-300 font-bold transition";
+        } else {
+          btn.className = "py-2.5 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400 transition";
+        }
+      });
+    }
+
+    function setCashType(type) {
+      selectedCashType = type;
+      const btnOut = document.getElementById('btnCashOut');
+      const btnIn  = document.getElementById('btnCashIn');
+      if (type === 'out') {
+        btnOut.className = "py-2.5 rounded-xl border border-rose-500 bg-rose-500/20 text-rose-300 font-bold transition";
+        btnIn.className  = "py-2.5 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400 transition";
+      } else {
+        btnIn.className  = "py-2.5 rounded-xl border border-emerald-500 bg-emerald-500/20 text-emerald-300 font-bold transition";
+        btnOut.className = "py-2.5 rounded-xl border border-[#30363d] bg-[#21262d] text-gray-400 transition";
+      }
+    }
+
+    /* เปิด Modal พร้อม Reset ข้อมูลเดิม */
+    function openForexModal() {
+      document.getElementById('fxBalance').value = '';
+      document.getElementById('fxEquity').value = '';
+      document.getElementById('fxPnl').value = '';
+      document.getElementById('fxNote').value = '';
+      const today = new Date().toISOString().slice(0, 10);
+      document.getElementById('fxDate').value = today;
+      document.getElementById('fxSinc').value = '2026-08-01';
+      openModal('modalForex');
+    }
+
+    function openTradeModal() {
+      document.getElementById('tradeTicker').value = '';
+      document.getElementById('tradeShares').value = '';
+      document.getElementById('tradePrice').value = '';
+      document.getElementById('tradeNote').value = '';
+      document.getElementById('tradeDate').value = new Date().toISOString().slice(0, 10);
+      setSide('BUY');
+      openModal('modalTrade');
+    }
+
+    function openCashflowModal() {
+      document.getElementById('cashAmount').value = '';
+      document.getElementById('cashNote').value = '';
+      document.getElementById('cashDate').value = new Date().toISOString().slice(0, 10);
+      setCashType('out');
+      openModal('modalCashflow');
+    }
+
     function calcForexPnl() {
       const bal = Number(document.getElementById('fxBalance').value) || 0;
       const eq  = Number(document.getElementById('fxEquity').value) || 0;
@@ -841,6 +1041,7 @@
 
     function submitForexForm() {
       const terminal = document.getElementById('fxTerminal').value;
+      const sinc     = document.getElementById('fxSinc').value;
       const date     = document.getElementById('fxDate').value || new Date().toISOString().slice(0,10);
       const balance  = Number(document.getElementById('fxBalance').value);
       const equity   = Number(document.getElementById('fxEquity').value);
@@ -851,11 +1052,68 @@
       btn.innerText = 'กำลังบันทึก...';
       btn.disabled = true;
 
-      apiCall('addForex', { terminal, date, balanceUSD: balance, equityUSD: equity, pnlUSD: pnl, note }, (res) => {
+      apiCall('addForex', { terminal, sinc, date, balanceUSD: balance, equityUSD: equity, pnlUSD: pnl, note }, (res) => {
         btn.innerText = 'บันทึก MT5';
         btn.disabled = false;
         if (res.ok) {
           closeModal('modalForex');
+          // ล้างค่าฟอร์มออกทันทีหลังบันทึกสำเร็จ
+          document.getElementById('fxBalance').value = '';
+          document.getElementById('fxEquity').value = '';
+          document.getElementById('fxPnl').value = '';
+          document.getElementById('fxNote').value = '';
+          loadDashboardData();
+        } else {
+          alert('ผิดพลาด: ' + res.error);
+        }
+      });
+    }
+
+    function submitTradeForm() {
+      const ticker = document.getElementById('tradeTicker').value.trim();
+      const shares = Number(document.getElementById('tradeShares').value);
+      const price  = Number(document.getElementById('tradePrice').value);
+      const date   = document.getElementById('tradeDate').value;
+      const group  = document.getElementById('tradeGroup').value;
+      const note   = document.getElementById('tradeNote').value.trim();
+
+      if (!ticker) return alert('กรุณาระบุ Ticker');
+      if (shares <= 0 || price <= 0) return alert('กรุณากรอกจำนวนและราคาให้ถูกต้อง');
+
+      const btn = document.getElementById('btnSaveTrade');
+      btn.innerText = 'กำลังบันทึก...';
+      btn.disabled = true;
+
+      apiCall('addTrade', { side: selectedSide, ticker, shares, price, date, group, note }, (res) => {
+        btn.innerText = 'บันทึกข้อมูล';
+        btn.disabled = false;
+        if (res.ok) {
+          closeModal('modalTrade');
+          loadDashboardData();
+        } else {
+          alert('ผิดพลาด: ' + res.error);
+        }
+      });
+    }
+
+    function submitCashflowForm() {
+      const amount = Number(document.getElementById('cashAmount').value);
+      const date   = document.getElementById('cashDate').value;
+      const cat    = document.getElementById('cashCategory').value;
+      const acc    = document.getElementById('cashAccount').value;
+      const note   = document.getElementById('cashNote').value.trim();
+
+      if (amount <= 0) return alert('กรุณากรอกจำนวนเงินให้ถูกต้อง');
+
+      const btn = document.getElementById('btnSaveCash');
+      btn.innerText = 'กำลังบันทึก...';
+      btn.disabled = true;
+
+      apiCall('addCashflow', { type: selectedCashType, category: cat, account: acc, amountTHB: amount, date, note }, (res) => {
+        btn.innerText = 'บันทึกเงินสด';
+        btn.disabled = false;
+        if (res.ok) {
+          closeModal('modalCashflow');
           loadDashboardData();
         } else {
           alert('ผิดพลาด: ' + res.error);
@@ -869,6 +1127,32 @@
         if (res.ok) loadDashboardData();
         else alert('ผิดพลาด: ' + res.error);
       });
+    }
+
+    function deleteTradeItem(id) {
+      if (!confirm('ยืนยันลบรายการลงทุนนี้?')) return;
+      apiCall('deleteTrade', { id }, (res) => {
+        if (res.ok) loadDashboardData();
+        else alert('ผิดพลาด: ' + res.error);
+      });
+    }
+
+    function deleteCashflowItem(id) {
+      if (!confirm('ยืนยันลบรายการกระแสเงินสดนี้?')) return;
+      apiCall('deleteCashflow', { id }, (res) => {
+        if (res.ok) loadDashboardData();
+        else alert('ผิดพลาด: ' + res.error);
+      });
+    }
+
+    function populateDropdowns() {
+      if (!appData) return;
+      const grpSel = document.getElementById('tradeGroup');
+      if (grpSel) grpSel.innerHTML = (appData.groups || []).map(g => `<option value="${g.nameTh}">${g.nameTh}</option>`).join('');
+      const catSel = document.getElementById('cashCategory');
+      if (catSel) catSel.innerHTML = (appData.categories || []).map(c => `<option value="${c.nameTh}">${c.nameTh}</option>`).join('');
+      const accSel = document.getElementById('cashAccount');
+      if (accSel) accSel.innerHTML = (appData.accounts || []).map(a => `<option value="${a.name}">${a.name} (${a.currency})</option>`).join('');
     }
 
     function populateAccountSelect() {
@@ -903,19 +1187,45 @@
       });
     }
 
-    function openModal(id) {
-      document.getElementById(id).classList.remove('hidden');
-      const today = new Date().toISOString().slice(0,10);
-      if (id === 'modalForex') document.getElementById('fxDate').value = today;
-    }
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
     function toggleFab() { document.getElementById('fabSubMenu').classList.toggle('hidden'); }
-    function setSide(s) { selectedSide = s; }
-    function setCashType(t) { selectedCashType = t; }
 
     function formatNum(n, dec = 2) {
       const num = Number(n) || 0;
       return num.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    }
+
+    function exportTradesCSV() {
+      if (!appData || !appData.trades) return;
+      const headers = ['id','date','side','ticker','shares','price','netUSD','netTHB'];
+      let csv = headers.join(',') + '\n';
+      appData.trades.forEach(t => {
+        csv += headers.map(h => `"${String(t[h] || '').replace(/"/g, '""')}"`).join(',') + '\n';
+      });
+      downloadFile(csv, `TRADES_${new Date().toISOString().slice(0,10)}.csv`, 'text/csv');
+    }
+
+    function exportCashflowCSV() {
+      if (!appData || !appData.cashflow) return;
+      const headers = ['id','date','type','category','account','amountTHB','note'];
+      let csv = headers.join(',') + '\n';
+      appData.cashflow.forEach(c => {
+        csv += headers.map(h => `"${String(c[h] || '').replace(/"/g, '""')}"`).join(',') + '\n';
+      });
+      downloadFile(csv, `CASHFLOW_${new Date().toISOString().slice(0,10)}.csv`, 'text/csv');
+    }
+
+    function downloadFile(content, fileName, mimeType) {
+      const blob = new Blob(["\uFEFF" + content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
